@@ -2,12 +2,12 @@ using System.Text.Json;
 
 namespace WSIST.Engine;
 
-public class TestOrganizer
+public class TestManagement
 {
     private const string Filename = @"C:\temp\tests.json";
     public List<Test> Tests = new List<Test>();
 
-    public TestOrganizer()
+    public TestManagement()
     {
         TestLoader();
     }
@@ -19,14 +19,14 @@ public class TestOrganizer
         return id;
     }
 
-    public void NewTestMaker()
+    public void NewTestMaker(string title, string subject, DateTime DueDate)
     {
         Test newTest = new()
         {
             Id = IdMaker(),
-            Title = "Test",
-            Subject = "French",
-            DueDate = new DateTime(2026, 01, 04),
+            Title = title,
+            Subject = subject,
+            DueDate = DueDate,
         };
         Tests.Add(newTest);
         SaveTests(Tests);
@@ -42,7 +42,7 @@ public class TestOrganizer
         Console.WriteLine(json);
     }
 
-    public void TestLoader()
+    private void TestLoader()
     {
         if (File.Exists(Filename))
         {
@@ -55,11 +55,12 @@ public class TestOrganizer
         }
     }
 
-    private void TestRemover(Guid ID)
+    public void TestRemover(Guid ID)
     {
-        if (File.Exists(Filename))
-        {
-            // Tests.Remove(ID);
-        }
+        var test = Tests.FirstOrDefault(test => test.Id == ID);
+        if(test == null)
+            return;
+        Tests.Remove(test);
+        SaveTests(Tests);
     }
 }
