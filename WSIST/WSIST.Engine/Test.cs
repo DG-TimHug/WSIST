@@ -7,7 +7,7 @@ public class Test
     public required string Subject { get; set; }
     public DateTime DueDate { get; set; }
 
-    public static void Main()
+    public static void Manual()
     {
         TestManagement management = new();
         int.TryParse(Console.ReadLine(), out var selectedOption);
