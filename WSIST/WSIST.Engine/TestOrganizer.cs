@@ -4,7 +4,7 @@ namespace WSIST.Engine;
 
 public class TestOrganizer
 {
-    public static void NewTestMaker()
+    public void NewTestMaker()
     {
         Test newTest = new()
         {
@@ -16,10 +16,10 @@ public class TestOrganizer
         SaveTests(newTest);
     }
 
-    private static void SaveTests(Test test)
+    private void SaveTests(Test test)
     {
         string jsonString = JsonSerializer.Serialize(test);
-        File.WriteAllText(TestManagement.Filename, jsonString);
+        File.AppendAllText(TestManagement.Filename, jsonString + Environment.NewLine);
         Console.WriteLine(jsonString);
     }
 }

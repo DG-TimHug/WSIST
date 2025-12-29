@@ -1,11 +1,13 @@
 namespace WSIST.Engine;
 
-public static class TestManagement
+public abstract class TestManagement
 {
-    internal static readonly string Filename = "tests.json";
+    internal const string Filename = @"C:\temp\tests.json";
+    
+
     public static Guid IdMaker()
     {
-        var id = new Guid();
+        var id = Guid.NewGuid();
         Console.Write(id);
         return id;
     }
