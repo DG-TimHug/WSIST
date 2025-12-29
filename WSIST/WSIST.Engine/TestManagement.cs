@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace WSIST.Engine;
@@ -51,6 +52,20 @@ public class TestManagement
             if (string.IsNullOrWhiteSpace(jsonString))
             {
                 return;
+            }
+        }
+    }
+
+    public void TestEditor(Guid id, string title, string subject, DateTime duedate)
+    {
+        foreach (var test in Tests)
+        {
+            if (test.Id == id)
+            {
+                test.Subject = subject;
+                test.Title = title;
+                test.DueDate = duedate;
+                SaveTests(Tests);
             }
         }
     }
