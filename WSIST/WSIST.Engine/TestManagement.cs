@@ -55,7 +55,7 @@ public class TestManagement
         }
     }
 
-    private void TestRemover(Guid ID)
+    public void TestRemover(Guid ID)
     {
         var test = Tests.FirstOrDefault(test => test.Id == ID);
         if(test == null)
