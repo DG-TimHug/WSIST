@@ -1,5 +1,4 @@
 ﻿@page "/"
-@RenderMode.InteractiveServer
 <PageTitle>Home</PageTitle>
 
 <h1>Overview</h1>
@@ -62,7 +61,6 @@ else
 
     public void TriggerTest()
     {
-        Engine.TestOrganizer organizer = new();
-        organizer.NewTestMaker();
+        Engine.Test.Main();
     }
 }
