@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+@RenderMode.InteractiveServer
 <PageTitle>Home</PageTitle>
 
 <h1>Overview</h1>
@@ -32,6 +32,8 @@ else
         }
         </tbody>
     </table>
+    
+    <button @onclick="TriggerTest">Make new Test</button>
 }
 @code {
     private WeatherForecast[]? forecasts;
@@ -58,4 +60,8 @@ else
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
 
+    public void TriggerTest()
+    {
+        Engine.TestOrganizer.NewTestMaker();
+    }
 }
