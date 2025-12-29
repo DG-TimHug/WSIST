@@ -37,11 +37,24 @@ public partial class Home
     //Delete Test Modal
 
     private bool showEditTestModal = false;
-    private Test localTest;
+    private Test? localTest;
 
     private void OpenEditTestModal()
     {
         showEditTestModal = true;
+    }
+
+    private void OpenEdit(Test test)
+    {
+        localTest = new Test()
+        {
+            Id = test.Id,
+            Title = test.Title,
+            Subject = test.Subject,
+            DueDate = test.DueDate
+        };
+        
+        OpenEditTestModal();
     }
 
     private void CloseEditTestModal()
