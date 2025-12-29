@@ -1,5 +1,6 @@
 ﻿namespace WSIST.Engine;
 
-public class Class1
+public class bob
 {
+    
 }
