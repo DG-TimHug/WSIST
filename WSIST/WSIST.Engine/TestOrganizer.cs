@@ -5,7 +5,12 @@ namespace WSIST.Engine;
 public class TestOrganizer
 {
     private const string Filename = @"C:\temp\tests.json";
-    public List<Test>? Tests = new List<Test>();
+    private List<Test> Tests = new List<Test>();
+
+    public TestOrganizer()
+    {
+        TestLoader();
+    }
 
     private static Guid IdMaker()
     {
@@ -13,6 +18,7 @@ public class TestOrganizer
         Console.Write(id);
         return id;
     }
+
     public void NewTestMaker()
     {
         Test newTest = new()
@@ -20,7 +26,7 @@ public class TestOrganizer
             Id = IdMaker(),
             Title = "Test 2",
             Subject = "Math",
-            DueDate = new DateTime(2026,01,03)
+            DueDate = new DateTime(2026, 01, 03),
         };
         Tests.Add(newTest);
         SaveTests(Tests);
@@ -28,19 +34,32 @@ public class TestOrganizer
 
     private void SaveTests(List<Test> tests)
     {
-        string json = JsonSerializer.Serialize(tests, new JsonSerializerOptions{ WriteIndented = true });
+        string json = JsonSerializer.Serialize(
+            tests,
+            new JsonSerializerOptions { WriteIndented = true }
+        );
         File.WriteAllText(Filename, json);
         Console.WriteLine(json);
     }
 
-    private List<Test>? TestLoader()
+    private void TestLoader()
     {
         if (File.Exists(Filename))
         {
             string jsonString = File.ReadAllText(Filename);
             Tests = JsonSerializer.Deserialize<List<Test>>(jsonString);
+            if (string.IsNullOrWhiteSpace(jsonString))
+            {
+                return;
+            }
         }
+    }
 
-        return Tests;
+    private void TestRemover(Guid ID)
+    {
+        if (File.Exists(Filename))
+        {
+            // Tests.Remove(ID);
+        }
     }
 }

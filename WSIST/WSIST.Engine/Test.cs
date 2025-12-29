@@ -6,7 +6,6 @@ public class Test
     public required string Title { get; set; }
     public required string Subject { get; set; }
     public DateTime DueDate { get; set; }
-    public TestOrganizer Organizer { get; set; }
 
     public static void Main()
     {
