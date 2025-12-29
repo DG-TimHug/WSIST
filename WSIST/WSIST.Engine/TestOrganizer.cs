@@ -5,7 +5,7 @@ namespace WSIST.Engine;
 public class TestOrganizer
 {
     private const string Filename = @"C:\temp\tests.json";
-    private List<Test> Tests = new List<Test>();
+    public List<Test> Tests = new List<Test>();
 
     public TestOrganizer()
     {
@@ -24,9 +24,9 @@ public class TestOrganizer
         Test newTest = new()
         {
             Id = IdMaker(),
-            Title = "Test 2",
-            Subject = "Math",
-            DueDate = new DateTime(2026, 01, 03),
+            Title = "Test",
+            Subject = "French",
+            DueDate = new DateTime(2026, 01, 04),
         };
         Tests.Add(newTest);
         SaveTests(Tests);
@@ -42,7 +42,7 @@ public class TestOrganizer
         Console.WriteLine(json);
     }
 
-    private void TestLoader()
+    public void TestLoader()
     {
         if (File.Exists(Filename))
         {
