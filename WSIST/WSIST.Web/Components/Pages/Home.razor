@@ -14,6 +14,7 @@ Welcome to your Overview.
             <th>Title</th>
             <th>Subject</th>
             <th>Date</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -23,6 +24,7 @@ Welcome to your Overview.
                 <td>@test.Title</td>
                 <td>@test.Subject</td>
                 <td>@test.DueDate.ToShortDateString()</td>
+                <td><button class="btn btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button></td>
             </tr>
         }
         </tbody>
@@ -54,12 +56,11 @@ Welcome to your Overview.
 
 </div>
 @code {
-    TestManagement management = new();
     private List<Test> tests = new();
 
     protected override void OnInitialized()
     {
-        tests = management.Tests.ToList();
+        tests = Management.Tests.ToList();
     }
 
     bool showAddTestModal = false;
@@ -79,15 +80,21 @@ Welcome to your Overview.
 
     private void AddTestSubmit()
     {
-        management.NewTestMaker(TestTitle, Subject, dueDate);
+        Management.NewTestMaker(TestTitle, Subject, dueDate);
         CloseAddTestModal();
         Refresh();
     }
 
     private void Refresh()
     {
-        management.Refresh();
-        tests = management.Tests.ToList();
+        Management.Refresh();
+        tests = Management.Tests.ToList();
         StateHasChanged();
+    }
+
+    private void DeleteTest(Guid ID)
+    {
+        Management.TestRemover(ID);
+        Refresh();
     }
 }
