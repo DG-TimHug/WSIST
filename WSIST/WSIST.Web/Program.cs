@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddSingleton<TestOrganizer>();
+builder.Services.AddSingleton<TestManagement>();
 
 var app = builder.Build();
 

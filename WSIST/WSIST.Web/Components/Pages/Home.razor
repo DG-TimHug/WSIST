@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using WSIST.Engine
-@inject TestOrganizer Organizer
+@inject TestManagement Management
 <PageTitle>Home</PageTitle>
 
 <h1>Overview</h1>
@@ -16,7 +16,7 @@ Welcome to your Overview.
         </tr>
         </thead>
         <tbody>
-        @foreach (var test in Organizer.Tests)
+        @foreach (var test in Management.Tests)
         {
             <tr>
                 <td>@test.Title</td>
