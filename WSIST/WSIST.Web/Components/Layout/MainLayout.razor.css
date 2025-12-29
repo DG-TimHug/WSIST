@@ -56,7 +56,6 @@ main {
 
     .top-row.auth ::deep a:first-child {
         flex: 1;
-        text-align: right;
         width: 0;
     }
 

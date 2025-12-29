@@ -17,7 +17,7 @@ Welcome to your Overview.
         </tr>
         </thead>
         <tbody>
-        @foreach (var test in Management.Tests)
+        @foreach (var test in tests)
         {
             <tr>
                 <td>@test.Title</td>
@@ -29,6 +29,9 @@ Welcome to your Overview.
     </table>
     <button class="btn btn-primary" @onclick="OpenAddTestModal">
         Add test
+    </button>
+    <button class="btn btn-primary" @onclick="Refresh">
+        Refresh
     </button>
     @if (showAddTestModal)
     {
@@ -51,6 +54,14 @@ Welcome to your Overview.
 
 </div>
 @code {
+    TestManagement management = new();
+    private List<Test> tests = new();
+
+    protected override void OnInitialized()
+    {
+        tests = management.Tests.ToList();
+    }
+
     bool showAddTestModal = false;
     
     void OpenAddTestModal()
@@ -68,8 +79,15 @@ Welcome to your Overview.
 
     private void AddTestSubmit()
     {
-        TestManagement management = new();
         management.NewTestMaker(TestTitle, Subject, dueDate);
         CloseAddTestModal();
+        Refresh();
+    }
+
+    private void Refresh()
+    {
+        management.Refresh();
+        tests = management.Tests.ToList();
+        StateHasChanged();
     }
 }
