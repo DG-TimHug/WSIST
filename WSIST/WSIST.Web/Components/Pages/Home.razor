@@ -1,9 +1,10 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 @using WSIST.Engine
 @inject TestManagement Management
 <PageTitle>Home</PageTitle>
 
-<h1>Overview</h1>
+<h1>Your upcoming Tests</h1>
 
 Welcome to your Overview.
 <div>
@@ -16,7 +17,7 @@ Welcome to your Overview.
         </tr>
         </thead>
         <tbody>
-        @foreach (var test in Management.Tests)
+        @foreach (var test in tests)
         {
             <tr>
                 <td>@test.Title</td>
@@ -26,8 +27,67 @@ Welcome to your Overview.
         }
         </tbody>
     </table>
+    <button class="btn btn-primary" @onclick="OpenAddTestModal">
+        Add test
+    </button>
+    <button class="btn btn-primary" @onclick="Refresh">
+        Refresh
+    </button>
+    @if (showAddTestModal)
+    {
+        <div class="modal d-block">
+            <div class="modal-content">
+                <span class="close text-right" @onclick="CloseAddTestModal">X</span>
+                <form class="text-center" @onsubmit="AddTestSubmit">
+                    <label for="testTitle">Test Title</label><br>
+                    <input type="text" id="testTitle" name="Title" @bind="TestTitle"><br>
+                    <label for="testSubject">Subject</label><br>
+                    <input type="text" id="testSubject" name="Subject" @bind="Subject"><br/>
+                    <label for="testDueDate">Due Date</label><br>
+                    <input type="datetime-local" id="TestDueDate" name="dueDate" @bind="dueDate"><br/>
+                    <br/>
+                    <input type="submit" value="Submit"><br/>
+                </form>
+            </div>
+        </div>
+    }
+
 </div>
-    
 @code {
+    TestManagement management = new();
+    private List<Test> tests = new();
+
+    protected override void OnInitialized()
+    {
+        tests = management.Tests.ToList();
+    }
+
+    bool showAddTestModal = false;
     
+    void OpenAddTestModal()
+    {
+        showAddTestModal = true;
+    }
+    void CloseAddTestModal()
+    {
+        showAddTestModal = false;
+    }
+
+    private string TestTitle;
+    private string Subject;
+    private DateTime dueDate;
+
+    private void AddTestSubmit()
+    {
+        management.NewTestMaker(TestTitle, Subject, dueDate);
+        CloseAddTestModal();
+        Refresh();
+    }
+
+    private void Refresh()
+    {
+        management.Refresh();
+        tests = management.Tests.ToList();
+        StateHasChanged();
+    }
 }
