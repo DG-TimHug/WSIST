@@ -48,8 +48,8 @@ Welcome to your Overview.
                     <input type="text" id="testTitle" name="Title" @bind="TestTitle"><br>
                     <label for="testSubject">Subject</label><br>
                     <input type="text" id="testSubject" name="Subject" @bind="Subject"><br/>
-                    <label for="testDueDate">Due Date</label><br>
-                    <input type="datetime-local" id="TestDueDate" name="dueDate" @bind="dueDate"><br/>
+                    <label for="TestDueDate">Due Date</label><br>
+                    <input type="date" id="TestDueDate" name="dueDate" @bind="dueDate"><br/>
                     <br/>
                     <input type="submit" value="Submit"><br/>
                 </form>
@@ -69,7 +69,7 @@ Welcome to your Overview.
                     <label for="testSubject">Subject</label><br>
                     <input type="text" id="testSubject" name="Subject" value="@localTest.Subject"><br/>
                     <label for="TestDueDate">Due Date</label><br>
-                    <input type="datetime-local" id="TestDueDate" name="dueDate" value="@localTest.DueDate"><br/>
+                    <input type="date" id="TestDueDate" name="dueDate" value="@localTest.DueDate"><br/>
                     <br/>
                     <input type="submit" value="Submit"><br/>
                 </form>

@@ -1,4 +1,3 @@
-using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace WSIST.Engine;
@@ -20,14 +19,14 @@ public class TestManagement
         return id;
     }
 
-    public void NewTestMaker(string title, string subject, DateTime DueDate)
+    public void NewTestMaker(string title, string subject, DateTime dueDate)
     {
         Test newTest = new()
         {
             Id = IdMaker(),
             Title = title,
             Subject = subject,
-            DueDate = DueDate,
+            DueDate = dueDate,
         };
         Tests.Add(newTest);
         SaveTests(Tests);
@@ -56,7 +55,7 @@ public class TestManagement
         }
     }
 
-    public void TestEditor(Guid id, string title, string subject, DateTime duedate)
+    public void TestEditor(Guid id, string title, string subject, DateTime dueDate)
     {
         foreach (var test in Tests)
         {
@@ -64,15 +63,15 @@ public class TestManagement
             {
                 test.Subject = subject;
                 test.Title = title;
-                test.DueDate = duedate;
+                test.DueDate = dueDate;
                 SaveTests(Tests);
             }
         }
     }
 
-    public void TestRemover(Guid ID)
+    public void TestRemover(Guid id)
     {
-        var test = Tests.FirstOrDefault(test => test.Id == ID);
+        var test = Tests.FirstOrDefault(test => test.Id == id);
         if(test == null)
             return;
         Tests.Remove(test);

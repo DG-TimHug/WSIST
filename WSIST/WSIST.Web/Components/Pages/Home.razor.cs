@@ -53,8 +53,8 @@ public partial class Home
             Subject = test.Subject,
             DueDate = test.DueDate
         };
-        
-        OpenEditTestModal();
+        showEditTestModal = true;
+        //OpenEditTestModal();
     }
 
     private void CloseEditTestModal()
