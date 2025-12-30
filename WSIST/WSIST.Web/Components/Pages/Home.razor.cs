@@ -1,3 +1,4 @@
+using System.Globalization;
 using WSIST.Engine;
 
 namespace WSIST.Web.Components.Pages;
@@ -5,18 +6,20 @@ namespace WSIST.Web.Components.Pages;
 public partial class Home
 {
     private readonly TestManagement management = new TestManagement();
-    private List<Test> tests = new();
-    private string testTitle;
-    private Test.Subjects subject;
+    private List<Test> tests = [];
+    private string? testTitle;
     private DateOnly dueDate;
     private Test.Subjects selectedSubject;
+    private Test.TestVolume volume;
+    private Test.PersonalUnderstanding understanding;
+    private double grade;
 
     protected override void OnInitialized()
     {
         tests = management.Tests.ToList();
     }
         // Add Test Modal
-        private bool showAddTestModal = false;
+        private bool showAddTestModal;
 
     private void OpenAddTestModal()
     {
@@ -39,7 +42,7 @@ public partial class Home
     
     //Edit Test Modal
 
-    private bool showEditTestModal = false;
+    private bool showEditTestModal;
     private Test? localTest;
 
     private void OpenEditTestModal()
@@ -49,15 +52,17 @@ public partial class Home
 
     private void OpenEdit(Test test)
     {
-        localTest = new Test()
+        localTest = new Test
         {
             Id = test.Id,
             Title = test.Title,
             Subject = test.Subject,
-            DueDate = test.DueDate
+            DueDate = test.DueDate,
+            Volume = test.Volume,
+            Understanding = test.Understanding,
+            Grade = test.Grade
         };
-        showEditTestModal = true;
-        //OpenEditTestModal();
+        OpenEditTestModal();
     }
 
     private void CloseEditTestModal()
@@ -79,9 +84,9 @@ public partial class Home
         StateHasChanged();
     }
 
-    private void DeleteTest(Guid ID)
+    private void DeleteTest(Guid id)
     {
-        management.TestRemover(ID);
+        management.TestRemover(id);
         Refresh();
     }
 }

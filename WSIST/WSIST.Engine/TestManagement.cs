@@ -27,6 +27,9 @@ public class TestManagement
             Title = title,
             Subject = subject,
             DueDate = dueDate,
+            Volume = volume,
+            Understanding = understanding,
+            Grade = grade;
         };
         Tests.Add(newTest);
         SaveTests(Tests);
@@ -50,7 +53,6 @@ public class TestManagement
             Tests = JsonSerializer.Deserialize<List<Test>>(jsonString);
             if (string.IsNullOrWhiteSpace(jsonString))
             {
-                return;
             }
         }
     }
@@ -64,6 +66,9 @@ public class TestManagement
                 test.Subject = subject;
                 test.Title = title;
                 test.DueDate = dueDate;
+                test.Understanding = understanding;
+                test.Volume = volume;
+                test.Grade = Grade;
                 SaveTests(Tests);
             }
         }
