@@ -1,4 +1,3 @@
-using System.Globalization;
 using WSIST.Engine;
 
 namespace WSIST.Web.Components.Pages;
@@ -18,8 +17,9 @@ public partial class Home
     {
         tests = management.Tests.ToList();
     }
-        // Add Test Modal
-        private bool showAddTestModal;
+
+    // Add Test Modal
+    private bool showAddTestModal;
 
     private void OpenAddTestModal()
     {
@@ -39,7 +39,7 @@ public partial class Home
         CloseAddTestModal();
         Refresh();
     }
-    
+
     //Edit Test Modal
 
     private bool showEditTestModal;
@@ -60,7 +60,7 @@ public partial class Home
             DueDate = test.DueDate,
             Volume = test.Volume,
             Understanding = test.Understanding,
-            Grade = test.Grade
+            Grade = test.Grade,
         };
         OpenEditTestModal();
     }
@@ -72,7 +72,15 @@ public partial class Home
 
     private void EditTestSubmit()
     {
-        management.TestEditor(localTest.Id, localTest.Title, localTest.Subject, localTest.DueDate, localTest.Volume, localTest.Understanding, localTest.Grade);
+        management.TestEditor(
+            localTest.Id,
+            localTest.Title,
+            localTest.Subject,
+            localTest.DueDate,
+            localTest.Volume,
+            localTest.Understanding,
+            localTest.Grade
+        );
         CloseEditTestModal();
         Refresh();
     }

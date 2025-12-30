@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Text.Json;
 
 namespace WSIST.Engine;
@@ -20,7 +19,14 @@ public class TestManagement
         return id;
     }
 
-    public void NewTestMaker(string title, Test.Subjects subject, DateOnly dueDate, Test.TestVolume volume, Test.PersonalUnderstanding understanding, double grade)
+    public void NewTestMaker(
+        string title,
+        Test.Subjects subject,
+        DateOnly dueDate,
+        Test.TestVolume volume,
+        Test.PersonalUnderstanding understanding,
+        double grade
+    )
     {
         Test newTest = new()
         {
@@ -30,7 +36,7 @@ public class TestManagement
             DueDate = dueDate,
             Volume = volume,
             Understanding = understanding,
-            Grade = grade
+            Grade = grade,
         };
         Tests.Add(newTest);
         SaveTests(Tests);
@@ -52,13 +58,19 @@ public class TestManagement
         {
             string jsonString = File.ReadAllText(Filename);
             Tests = JsonSerializer.Deserialize<List<Test>>(jsonString);
-            if (string.IsNullOrWhiteSpace(jsonString))
-            {
-            }
+            if (string.IsNullOrWhiteSpace(jsonString)) { }
         }
     }
 
-    public void TestEditor(Guid id, string title, Test.Subjects subject, DateOnly dueDate, Test.TestVolume volume, Test.PersonalUnderstanding understanding, double grade)
+    public void TestEditor(
+        Guid id,
+        string title,
+        Test.Subjects subject,
+        DateOnly dueDate,
+        Test.TestVolume volume,
+        Test.PersonalUnderstanding understanding,
+        double grade
+    )
     {
         foreach (var test in Tests)
         {
@@ -78,7 +90,7 @@ public class TestManagement
     public void TestRemover(Guid id)
     {
         var test = Tests.FirstOrDefault(test => test.Id == id);
-        if(test == null)
+        if (test == null)
             return;
         Tests.Remove(test);
         SaveTests(Tests);
@@ -88,5 +100,4 @@ public class TestManagement
     {
         TestLoader();
     }
-
 }

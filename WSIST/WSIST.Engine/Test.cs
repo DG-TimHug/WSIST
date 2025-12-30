@@ -17,26 +17,26 @@ public class Test
         French,
         German,
         Chemistry,
-        Other
+        Other,
     }
 
     public enum TestVolume
     {
-        very_low,
-        low,
-        medium,
-        average,
-        high,
-        very_high
+        VeryLow,
+        Low,
+        Medium,
+        Average,
+        High,
+        VeryHigh,
     }
 
     public enum PersonalUnderstanding
     {
-        very_low,
-        low,
-        medium,
-        average,
-        high,
-        very_high
+        VeryLow,
+        Low,
+        Medium,
+        Average,
+        High,
+        VeryHigh,
     }
 }
