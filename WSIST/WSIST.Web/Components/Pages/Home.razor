@@ -21,7 +21,7 @@ Welcome to your Overview.
         {
             <tr>
                 <td>@test.Title</td>
-                <td>@test.Subject</td>
+                <td>@test.Subjects</td>
                 <td>@test.DueDate.ToShortDateString()</td>
                 <td><button class="btn btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button> <button class="btn btn-primary" @onclick="() => OpenEdit(test)" @bind="localTest">
                     Edit test
@@ -67,7 +67,7 @@ Welcome to your Overview.
                     <label for="testTitle">Test Title</label><br>
                     <input type="text" id="testTitle" name="Title" @bind="@localTest.Title"><br>
                     <label for="testSubject">Subject</label><br>
-                    <input type="text" id="testSubject" name="Subject" @bind="@localTest.Subject"><br/>
+                    <input type="text" id="testSubject" name="Subject" @bind="@localTest.Subjects"><br/>
                     <label for="TestDueDate">Due Date</label><br>
                     <input type="date" id="TestDueDate" name="dueDate" @bind="@localTest.DueDate"><br/>
                     <br/>

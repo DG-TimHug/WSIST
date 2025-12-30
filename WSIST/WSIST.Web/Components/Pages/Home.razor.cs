@@ -53,7 +53,7 @@ public partial class Home
         {
             Id = test.Id,
             Title = test.Title,
-            Subject = test.Subject,
+            Subjects = test.Subjects,
             DueDate = test.DueDate
         };
         showEditTestModal = true;
@@ -67,7 +67,7 @@ public partial class Home
 
     private void EditTestSubmit()
     {
-        management.TestEditor(localTest.Id, localTest.Title, localTest.Subject, localTest.DueDate);
+        management.TestEditor(localTest.Id, localTest.Title, localTest.Subjects, localTest.DueDate);
         CloseEditTestModal();
         Refresh();
     }

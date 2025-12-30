@@ -19,13 +19,13 @@ public class TestManagement
         return id;
     }
 
-    public void NewTestMaker(string title, string subject, DateOnly dueDate)
+    public void NewTestMaker(string title, Enum subject, DateOnly dueDate)
     {
         Test newTest = new()
         {
             Id = IdMaker(),
             Title = title,
-            Subject = subject,
+            Subjects = subject,
             DueDate = dueDate,
         };
         Tests.Add(newTest);
@@ -55,13 +55,13 @@ public class TestManagement
         }
     }
 
-    public void TestEditor(Guid id, string title, string subject, DateOnly dueDate)
+    public void TestEditor(Guid id, string title, Enum subject, DateOnly dueDate)
     {
         foreach (var test in Tests)
         {
             if (test.Id == id)
             {
-                test.Subject = subject;
+                test.Subjects. = subject;
                 test.Title = title;
                 test.DueDate = dueDate;
                 SaveTests(Tests);

@@ -4,8 +4,16 @@ public class Test
 {
     public Guid Id { get; set; }
     public required string Title { get; set; }
-    public required string Subject { get; set; }
     public DateOnly DueDate { get; set; }
+
+    public enum Subjects
+    {
+        Math,
+        English,
+        French,
+        German,
+        Chemistry,
+    }
 
     //public static void Manual()
     //{
