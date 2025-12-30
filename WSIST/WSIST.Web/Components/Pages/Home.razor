@@ -1,7 +1,6 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @using WSIST.Engine
-@inject TestManagement Management
 <PageTitle>Home</PageTitle>
 
 <h1>Your upcoming Tests</h1>
@@ -24,7 +23,9 @@ Welcome to your Overview.
                 <td>@test.Title</td>
                 <td>@test.Subject</td>
                 <td>@test.DueDate.ToShortDateString()</td>
-                <td><button class="btn btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button></td>
+                <td><button class="btn btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button> <button class="btn btn-primary" @onclick="() => OpenEdit(test)" @bind="localTest">
+                    Edit test
+                </button></td>
             </tr>
         }
         </tbody>
@@ -35,6 +36,8 @@ Welcome to your Overview.
     <button class="btn btn-primary" @onclick="Refresh">
         Refresh
     </button>
+    
+    
     @if (showAddTestModal)
     {
         <div class="modal d-block">
@@ -42,59 +45,36 @@ Welcome to your Overview.
                 <span class="close text-right" @onclick="CloseAddTestModal">X</span>
                 <form class="text-center" @onsubmit="AddTestSubmit">
                     <label for="testTitle">Test Title</label><br>
-                    <input type="text" id="testTitle" name="Title" @bind="TestTitle"><br>
+                    <input type="text" id="testTitle" name="Title" @bind="testTitle"><br>
                     <label for="testSubject">Subject</label><br>
-                    <input type="text" id="testSubject" name="Subject" @bind="Subject"><br/>
-                    <label for="testDueDate">Due Date</label><br>
-                    <input type="datetime-local" id="TestDueDate" name="dueDate" @bind="dueDate"><br/>
+                    <input type="text" id="testSubject" name="Subject" @bind="subject"><br/>
+                    <label for="TestDueDate">Due Date</label><br>
+                    <input type="date" id="TestDueDate" name="dueDate" @bind="dueDate"><br/>
                     <br/>
                     <input type="submit" value="Submit"><br/>
                 </form>
             </div>
         </div>
     }
+    
+    
+    @if (showEditTestModal)
+    {
+        <div class="modal d-block">
+            <div class="modal-content">
+                <span class="close text-right" @onclick="CloseEditTestModal">X</span>
+                <form class="text-center" @onsubmit="EditTestSubmit">
+                    <label for="testTitle">Test Title</label><br>
+                    <input type="text" id="testTitle" name="Title" @bind="@localTest.Title"><br>
+                    <label for="testSubject">Subject</label><br>
+                    <input type="text" id="testSubject" name="Subject" @bind="@localTest.Subject"><br/>
+                    <label for="TestDueDate">Due Date</label><br>
+                    <input type="date" id="TestDueDate" name="dueDate" @bind="@localTest.DueDate"><br/>
+                    <br/>
+                    <input type="submit" value="Finish Editing"><br/>
+                </form>
+            </div>
+        </div>
+    }
 
 </div>
-@code {
-    private List<Test> tests = new();
-
-    protected override void OnInitialized()
-    {
-        tests = Management.Tests.ToList();
-    }
-
-    bool showAddTestModal = false;
-    
-    void OpenAddTestModal()
-    {
-        showAddTestModal = true;
-    }
-    void CloseAddTestModal()
-    {
-        showAddTestModal = false;
-    }
-
-    private string TestTitle;
-    private string Subject;
-    private DateTime dueDate;
-
-    private void AddTestSubmit()
-    {
-        Management.NewTestMaker(TestTitle, Subject, dueDate);
-        CloseAddTestModal();
-        Refresh();
-    }
-
-    private void Refresh()
-    {
-        Management.Refresh();
-        tests = Management.Tests.ToList();
-        StateHasChanged();
-    }
-
-    private void DeleteTest(Guid ID)
-    {
-        Management.TestRemover(ID);
-        Refresh();
-    }
-}

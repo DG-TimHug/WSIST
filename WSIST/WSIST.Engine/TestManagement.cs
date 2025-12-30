@@ -19,14 +19,14 @@ public class TestManagement
         return id;
     }
 
-    public void NewTestMaker(string title, string subject, DateTime DueDate)
+    public void NewTestMaker(string title, string subject, DateOnly dueDate)
     {
         Test newTest = new()
         {
             Id = IdMaker(),
             Title = title,
             Subject = subject,
-            DueDate = DueDate,
+            DueDate = dueDate,
         };
         Tests.Add(newTest);
         SaveTests(Tests);
@@ -55,9 +55,23 @@ public class TestManagement
         }
     }
 
-    public void TestRemover(Guid ID)
+    public void TestEditor(Guid id, string title, string subject, DateOnly dueDate)
     {
-        var test = Tests.FirstOrDefault(test => test.Id == ID);
+        foreach (var test in Tests)
+        {
+            if (test.Id == id)
+            {
+                test.Subject = subject;
+                test.Title = title;
+                test.DueDate = dueDate;
+                SaveTests(Tests);
+            }
+        }
+    }
+
+    public void TestRemover(Guid id)
+    {
+        var test = Tests.FirstOrDefault(test => test.Id == id);
         if(test == null)
             return;
         Tests.Remove(test);
