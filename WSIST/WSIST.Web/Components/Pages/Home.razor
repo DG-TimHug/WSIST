@@ -30,9 +30,9 @@
                 <td>@test.Title</td>
                 <td>@test.Subject</td>
                 <td>@test.DueDate.ToShortDateString()</td>
-                <td>@test.Volume</td>
-                <td>@test.Understanding</td>
-                <td><button class="btn btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button> <button class="btn btn-primary" @onclick="() => OpenEdit(test)" @bind="localTest">
+                <td>@Test.VolumeHelper(test.Volume)</td>
+                <td>@Test.UnderstandingHelper(test.Understanding)</td>
+                <td><button class="btn btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button> <button class="btn btn-primary" @bind="temporaryTest" @onclick="() => OpenEditTestModal(test)" >
                     Edit test
                 </button></td>
             </tr>
@@ -42,88 +42,55 @@
     <button class="btn btn-primary" @onclick="OpenAddTestModal">
         Add test
     </button>
-    
-    
-    
-    @if (showAddTestModal)
+
+    @if (showModal)
     {
         <div class="modal d-block">
             <div class="modal-content">
-                <span class="close text-right" @onclick="CloseAddTestModal">X</span>
-                <form class="text-center" @onsubmit="AddTestSubmit">
+                <div class="close text-right" @onclick="CloseModal">X</div>
+                <form class="text-center" @onsubmit="ModalSubmit">
                     <label for="testTitle">Test Title</label><br>
-                    <input type="text" id="testTitle" name="Title" @bind="testTitle"><br>
+                    <input type="text" id="testTitle" name="Title" @bind="@temporaryTest.Title"><br>
                     <label>Subject</label><br>
-                    <select @bind="selectedSubject">
+                    <select @bind="temporaryTest.Subject">
                         @foreach (var subject in Enum.GetValues<Test.Subjects>())
                         {
                             <option value="@subject">@subject</option>
                         }
                     </select><br/>
                     <label for="TestDueDate">Due Date</label><br>
-                    <input type="date" id="TestDueDate" name="dueDate" @bind="dueDate"><br/>
+                    <input type="date" id="TestDueDate" name="dueDate" @bind="@temporaryTest.DueDate"><br/>
                     <label>Volume</label><br>
-                    <select @bind="volume">
-                        @foreach (var testVolume in Enum.GetValues<Test.TestVolume>())
-                        {
-                            <option value="@testVolume">@Test.VolumeHelper(testVolume)</option>
-                        }
-                    </select><br/>
-                    <label>Understanding</label><br>
-                    <select @bind="understanding">
-                        @foreach (var personalUnderstanding in Enum.GetValues<Test.PersonalUnderstanding>())
-                        {
-                            <option value="@personalUnderstanding">@Test.UnderstandingHelper(personalUnderstanding)</option>
-                        }
-                    </select><br/>
-                    <label for="grade">Grade</label><br>
-                    <input type="number" id="grade" name="Title" @bind="grade"><br>
-                    <p></p>
-                    <input type="submit" value="Submit">
-                </form>
-            </div>
-        </div>
-    }
-    
-    
-    @if (showEditTestModal)
-    {
-        <div class="modal d-block">
-            <div class="modal-content">
-                <span class="close text-right" @onclick="CloseEditTestModal">X</span>
-                <form class="text-center" @onsubmit="EditTestSubmit">
-                    <label for="testTitle">Test Title</label><br>
-                    <input type="text" id="testTitle" name="Title" @bind="@localTest.Title"><br>
-                    <label>Subject</label><br>
-                    <select @bind="localTest.Subject">
-                        @foreach (var subject in Enum.GetValues<Test.Subjects>())
-                        {
-                            <option value="@subject">@subject</option>
-                        }
-                    </select><br/>
-                    <label for="TestDueDate">Due Date</label><br>
-                    <input type="date" id="TestDueDate" name="dueDate" @bind="@localTest.DueDate"><br/>
-                    <label>Volume</label><br>
-                    <select @bind="localTest.Volume">
+                    <select @bind="temporaryTest.Volume">
                         @foreach (var testVolume in Enum.GetValues<Test.TestVolume>())
                         {
                             <option value="@testVolume">@Test.VolumeHelper(testVolume)</option>
                         }
                     </select><br/>
                     <label>Personal Understanding</label><br>
-                    <select @bind="localTest.Understanding">
+                    <select @bind="temporaryTest.Understanding">
                         @foreach (var personalUnderstanding in Enum.GetValues<Test.PersonalUnderstanding>())
                         {
                             <option value="@personalUnderstanding">@Test.UnderstandingHelper(personalUnderstanding)</option>
                         }
                     </select><br/>
                     <label for="testgrade">Grade</label><br>
-                    <input type="number" id="testgrade" name="Title" @bind="@localTest.Grade">
+                    <input type="number"
+                           min="1"
+                           max="6"
+                           step="0.1"
+                           @bind="temporaryTest.Grade"
+                           disabled="@(temporaryTest.DueDate > DateOnly.FromDateTime(DateTime.Today))" />
                     <p></p>
-                    <input type="submit" value="Finish Editing">
+                    @if (temporaryTest.DueDate > DateOnly.FromDateTime(DateTime.Today))
+                    {
+                        <small class="text-muted">
+                            Grade can be entered after the test date.
+                        </small>
+                    }<br/>
+                    <input type="submit" value="Finish">
                 </form>
             </div>
         </div>
     }
-
 </div>

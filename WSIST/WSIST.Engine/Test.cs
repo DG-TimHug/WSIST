@@ -2,13 +2,13 @@
 
 public class Test
 {
-    public required Guid Id { get; set; }
-    public required string Title { get; set; }
-    public required Subjects Subject { get; set; }
-    public required DateOnly DueDate { get; set; }
-    public required TestVolume Volume { get; set; }
-    public required PersonalUnderstanding Understanding { get; set; }
-    public double Grade { get; set; }
+    public Guid Id { get; set; }
+    public string Title { get; set; }
+    public Subjects Subject { get; set; }
+    public DateOnly DueDate { get; set; }
+    public TestVolume Volume { get; set; }
+    public PersonalUnderstanding Understanding { get; set; }
+    public double? Grade { get; set; }
 
     public enum Subjects
     {
@@ -72,7 +72,7 @@ public class Test
 
         return "Please Choose a Setting";
     }
-    
+
     public static string UnderstandingHelper(PersonalUnderstanding volume)
     {
         switch (volume)

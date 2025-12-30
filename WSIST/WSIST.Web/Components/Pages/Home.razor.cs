@@ -4,55 +4,38 @@ namespace WSIST.Web.Components.Pages;
 
 public partial class Home
 {
-    private readonly TestManagement management = new TestManagement();
+    private readonly TestManagement management = new();
     private List<Test> tests = [];
     private string? testTitle;
     private DateOnly dueDate;
-    private Test.Subjects selectedSubject;
-    private Test.TestVolume volume;
-    private Test.PersonalUnderstanding understanding;
-    private double grade;
+    private readonly Test.Subjects selectedSubject;
+    private readonly Test.TestVolume volume;
+    private readonly Test.PersonalUnderstanding understanding;
+    private readonly double? grade;
+    private Test? localTest;
+    private Test? temporaryTest;
+    private Modes Mode { get; set; }
 
     protected override void OnInitialized()
     {
         tests = management.Tests.ToList();
     }
 
-    // Add Test Modal
-    private bool showAddTestModal;
-
-    private void OpenAddTestModal()
+    public enum Modes
     {
-        testTitle = "";
-        dueDate = DateOnly.FromDateTime(DateTime.Today);
-        showAddTestModal = true;
+        AddTest,
+        EditTest,
     }
 
-    private void CloseAddTestModal()
+    //Modal
+
+    private bool showModal;
+
+    private void OpenEditTestModal(Test test)
     {
-        showAddTestModal = false;
-    }
+        Mode = Modes.EditTest;
 
-    private void AddTestSubmit()
-    {
-        management.NewTestMaker(testTitle, selectedSubject, dueDate, volume, understanding, grade);
-        CloseAddTestModal();
-        Refresh();
-    }
-
-    //Edit Test Modal
-
-    private bool showEditTestModal;
-    private Test? localTest;
-
-    private void OpenEditTestModal()
-    {
-        showEditTestModal = true;
-    }
-
-    private void OpenEdit(Test test)
-    {
-        localTest = new Test
+        temporaryTest = new Test
         {
             Id = test.Id,
             Title = test.Title,
@@ -62,26 +45,54 @@ public partial class Home
             Understanding = test.Understanding,
             Grade = test.Grade,
         };
-        OpenEditTestModal();
+        showModal = true;
     }
 
-    private void CloseEditTestModal()
+    public void OpenAddTestModal()
     {
-        showEditTestModal = false;
+        temporaryTest = new Test();
+        Mode = Modes.AddTest;
+        temporaryTest.DueDate = DateOnly.FromDateTime(DateTime.Today);
+        showModal = true;
     }
 
-    private void EditTestSubmit()
+    private void CloseModal()
     {
-        management.TestEditor(
-            localTest.Id,
-            localTest.Title,
-            localTest.Subject,
-            localTest.DueDate,
-            localTest.Volume,
-            localTest.Understanding,
-            localTest.Grade
-        );
-        CloseEditTestModal();
+        showModal = false;
+        Refresh();
+    }
+
+    private void ModalSubmit()
+    {
+        switch (Mode)
+        {
+            case Modes.AddTest:
+            {
+                management.NewTestMaker(
+                    temporaryTest.Title,
+                    temporaryTest.Subject,
+                    temporaryTest.DueDate,
+                    temporaryTest.Volume,
+                    temporaryTest.Understanding,
+                    temporaryTest.Grade
+                );
+                break;
+            }
+            case Modes.EditTest:
+            {
+                management.TestEditor(
+                    temporaryTest.Id,
+                    temporaryTest.Title,
+                    temporaryTest.Subject,
+                    temporaryTest.DueDate,
+                    temporaryTest.Volume,
+                    temporaryTest.Understanding,
+                    temporaryTest.Grade
+                );
+                break;
+            }
+        }
+        CloseModal();
         Refresh();
     }
 

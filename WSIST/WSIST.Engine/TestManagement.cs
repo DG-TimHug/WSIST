@@ -4,7 +4,7 @@ namespace WSIST.Engine;
 
 public class TestManagement
 {
-    private const string Filename = @"C:\temp\tests.json";
+    private const string Filename = @"C:\Development\Git Projects\WSIST\WSIST\WSIST.Engine\tests.json";
     public List<Test> Tests = new List<Test>();
 
     public TestManagement()
@@ -25,7 +25,7 @@ public class TestManagement
         DateOnly dueDate,
         Test.TestVolume volume,
         Test.PersonalUnderstanding understanding,
-        double grade
+        double? grade
     )
     {
         Test newTest = new()
@@ -38,6 +38,7 @@ public class TestManagement
             Understanding = understanding,
             Grade = grade,
         };
+        GradeVerifier(dueDate, grade);
         Tests.Add(newTest);
         SaveTests(Tests);
     }
@@ -62,6 +63,19 @@ public class TestManagement
         }
     }
 
+    private void GradeVerifier(DateOnly dueDate, double? grade)
+    {
+        if (dueDate > DateOnly.FromDateTime(DateTime.Today))
+        {
+            grade = null;
+        }
+
+        if (grade is not null && (grade < 1 || grade > 6))
+        {
+            throw new ArgumentOutOfRangeException(nameof(grade), "Grade must be between 1 and 6.");
+        }
+    }
+
     public void TestEditor(
         Guid id,
         string title,
@@ -69,7 +83,7 @@ public class TestManagement
         DateOnly dueDate,
         Test.TestVolume volume,
         Test.PersonalUnderstanding understanding,
-        double grade
+        double? grade
     )
     {
         foreach (var test in Tests)
@@ -82,6 +96,7 @@ public class TestManagement
                 test.Volume = volume;
                 test.Understanding = understanding;
                 test.Grade = grade;
+                GradeVerifier(dueDate, grade);
                 SaveTests(Tests);
             }
         }
