@@ -34,7 +34,7 @@ public partial class Home
     private void OpenEditTestModal(Test test)
     {
         Mode = Modes.EditTest;
-        
+
         temporaryTest = new Test
         {
             Id = test.Id,
@@ -43,7 +43,7 @@ public partial class Home
             DueDate = test.DueDate,
             Volume = test.Volume,
             Understanding = test.Understanding,
-            Grade = test.Grade
+            Grade = test.Grade,
         };
         showModal = true;
     }
@@ -68,12 +68,14 @@ public partial class Home
         {
             case Modes.AddTest:
             {
-                management.NewTestMaker(temporaryTest.Title,
+                management.NewTestMaker(
+                    temporaryTest.Title,
                     temporaryTest.Subject,
                     temporaryTest.DueDate,
                     temporaryTest.Volume,
                     temporaryTest.Understanding,
-                    temporaryTest.Grade);
+                    temporaryTest.Grade
+                );
                 break;
             }
             case Modes.EditTest:
