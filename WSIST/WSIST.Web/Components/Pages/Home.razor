@@ -45,9 +45,9 @@ Welcome to your Overview.
                 <span class="close text-right" @onclick="CloseAddTestModal">X</span>
                 <form class="text-center" @onsubmit="AddTestSubmit">
                     <label for="testTitle">Test Title</label><br>
-                    <input type="text" id="testTitle" name="Title" @bind="TestTitle"><br>
+                    <input type="text" id="testTitle" name="Title" @bind="testTitle"><br>
                     <label for="testSubject">Subject</label><br>
-                    <input type="text" id="testSubject" name="Subject" @bind="Subject"><br/>
+                    <input type="text" id="testSubject" name="Subject" @bind="subject"><br/>
                     <label for="TestDueDate">Due Date</label><br>
                     <input type="date" id="TestDueDate" name="dueDate" @bind="dueDate"><br/>
                     <br/>
@@ -65,13 +65,13 @@ Welcome to your Overview.
                 <span class="close text-right" @onclick="CloseEditTestModal">X</span>
                 <form class="text-center" @onsubmit="EditTestSubmit">
                     <label for="testTitle">Test Title</label><br>
-                    <input type="text" id="testTitle" name="Title" value="@localTest.Title"><br>
+                    <input type="text" id="testTitle" name="Title" @bind="@localTest.Title"><br>
                     <label for="testSubject">Subject</label><br>
-                    <input type="text" id="testSubject" name="Subject" value="@localTest.Subject"><br/>
+                    <input type="text" id="testSubject" name="Subject" @bind="@localTest.Subject"><br/>
                     <label for="TestDueDate">Due Date</label><br>
-                    <input type="date" id="TestDueDate" name="dueDate" value="@localTest.DueDate"><br/>
+                    <input type="date" id="TestDueDate" name="dueDate" @bind="@localTest.DueDate"><br/>
                     <br/>
-                    <input type="submit" value="Submit"><br/>
+                    <input type="submit" value="Finish Editing"><br/>
                 </form>
             </div>
         </div>

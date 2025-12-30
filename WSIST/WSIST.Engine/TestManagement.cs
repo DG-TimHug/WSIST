@@ -19,7 +19,7 @@ public class TestManagement
         return id;
     }
 
-    public void NewTestMaker(string title, string subject, DateTime dueDate)
+    public void NewTestMaker(string title, string subject, DateOnly dueDate)
     {
         Test newTest = new()
         {
@@ -55,7 +55,7 @@ public class TestManagement
         }
     }
 
-    public void TestEditor(Guid id, string title, string subject, DateTime dueDate)
+    public void TestEditor(Guid id, string title, string subject, DateOnly dueDate)
     {
         foreach (var test in Tests)
         {

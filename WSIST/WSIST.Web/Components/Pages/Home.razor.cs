@@ -4,21 +4,24 @@ namespace WSIST.Web.Components.Pages;
 
 public partial class Home
 {
-    private TestManagement Management = new TestManagement();
+    private readonly TestManagement management = new TestManagement();
     private List<Test> tests = new();
-    private string TestTitle;
-    private string Subject;
-    private DateTime dueDate;
+    private string testTitle;
+    private string subject;
+    private DateOnly dueDate;
 
     protected override void OnInitialized()
     {
-        tests = Management.Tests.ToList();
+        tests = management.Tests.ToList();
     }
         // Add Test Modal
         private bool showAddTestModal = false;
 
     private void OpenAddTestModal()
     {
+        testTitle = "";
+        subject = "";
+        dueDate = DateOnly.FromDateTime(DateTime.Today);
         showAddTestModal = true;
     }
 
@@ -29,12 +32,12 @@ public partial class Home
 
     private void AddTestSubmit()
     {
-        Management.NewTestMaker(TestTitle, Subject, dueDate);
+        management.NewTestMaker(testTitle, subject, dueDate);
         CloseAddTestModal();
         Refresh();
     }
     
-    //Delete Test Modal
+    //Edit Test Modal
 
     private bool showEditTestModal = false;
     private Test? localTest;
@@ -64,21 +67,21 @@ public partial class Home
 
     private void EditTestSubmit()
     {
-        Management.TestEditor(localTest.Id, localTest.Title, localTest.Subject, localTest.DueDate);
-        CloseAddTestModal();
+        management.TestEditor(localTest.Id, localTest.Title, localTest.Subject, localTest.DueDate);
+        CloseEditTestModal();
         Refresh();
     }
 
     private void Refresh()
     {
-        Management.Refresh();
-        tests = Management.Tests.ToList();
+        management.Refresh();
+        tests = management.Tests.ToList();
         StateHasChanged();
     }
 
     private void DeleteTest(Guid ID)
     {
-        Management.TestRemover(ID);
+        management.TestRemover(ID);
         Refresh();
     }
 }
