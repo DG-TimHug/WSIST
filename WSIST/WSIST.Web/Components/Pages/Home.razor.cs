@@ -13,6 +13,7 @@ public partial class Home
     private readonly Test.PersonalUnderstanding understanding;
     private readonly double grade;
     private Test? localTest;
+    private Test? temporaryTest;
     private Modes Mode { get; set; }
 
     protected override void OnInitialized()
@@ -20,30 +21,37 @@ public partial class Home
         tests = management.Tests.ToList();
     }
 
-    public Home(double grade, Test.PersonalUnderstanding understanding, Test.Subjects selectedSubject,
-        Test.TestVolume volume, bool showModal)
-    {
-        this.grade = grade;
-        this.understanding = understanding;
-        this.selectedSubject = selectedSubject;
-        this.volume = volume;
-        this.showModal = showModal;
-    }
-
     public enum Modes
     {
         AddTest,
         EditTest,
-        Off
     }
-
 
     //Modal
 
     private bool showModal;
 
-    private void OpenModal(Modes modes)
+    private void OpenEditTestModal(Test test)
     {
+        Mode = Modes.EditTest;
+        
+        temporaryTest = new Test
+        {
+            Id = test.Id,
+            Title = test.Title,
+            Subject = test.Subject,
+            DueDate = test.DueDate,
+            Volume = test.Volume,
+            Understanding = test.Understanding,
+            Grade = test.Grade
+        };
+        showModal = true;
+    }
+
+    public void OpenAddTestModal()
+    {
+        temporaryTest = new Test();
+        Mode = Modes.AddTest;
         showModal = true;
     }
 
@@ -53,37 +61,35 @@ public partial class Home
         Refresh();
     }
 
-
-    private void OpenAddTestModal()
-    {
-        testTitle = "";
-        dueDate = DateOnly.FromDateTime(DateTime.Today);
-    }
-    
-
     private void ModalSubmit()
     {
         switch (Mode)
         {
             case Modes.AddTest:
             {
-                management.NewTestMaker(testTitle, selectedSubject, dueDate, volume, understanding, grade);
+                management.NewTestMaker(temporaryTest.Title,
+                    temporaryTest.Subject,
+                    temporaryTest.DueDate,
+                    temporaryTest.Volume,
+                    temporaryTest.Understanding,
+                    temporaryTest.Grade);
                 break;
             }
             case Modes.EditTest:
             {
                 management.TestEditor(
-                    localTest.Id,
-                    localTest.Title,
-                    localTest.Subject,
-                    localTest.DueDate,
-                    localTest.Volume,
-                    localTest.Understanding,
-                    localTest.Grade
+                    temporaryTest.Id,
+                    temporaryTest.Title,
+                    temporaryTest.Subject,
+                    temporaryTest.DueDate,
+                    temporaryTest.Volume,
+                    temporaryTest.Understanding,
+                    temporaryTest.Grade
                 );
                 break;
             }
         }
+        CloseModal();
         Refresh();
     }
 
