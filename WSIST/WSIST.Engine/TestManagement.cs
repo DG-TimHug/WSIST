@@ -5,7 +5,7 @@ namespace WSIST.Engine;
 public class TestManagement
 {
     private const string Filename = @"C:\Development\Git Projects\WSIST\WSIST\WSIST.Engine\tests.json";
-    public List<Test> Tests = new List<Test>();
+    public List<Test>? Tests = new List<Test>();
 
     public TestManagement()
     {
