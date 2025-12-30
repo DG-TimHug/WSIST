@@ -47,7 +47,7 @@
     {
         <div class="modal d-block">
             <div class="modal-content">
-                <span class="close text-right" @onclick="CloseModal">X</span>
+                <div class="close text-right" @onclick="CloseModal">X</div>
                 <form class="text-center" @onsubmit="ModalSubmit">
                     <label for="testTitle">Test Title</label><br>
                     <input type="text" id="testTitle" name="Title" @bind="@temporaryTest.Title"><br>
@@ -75,8 +75,19 @@
                         }
                     </select><br/>
                     <label for="testgrade">Grade</label><br>
-                    <input type="number" id="testgrade" name="Title" @bind="@temporaryTest.Grade">
+                    <input type="number"
+                           min="1"
+                           max="6"
+                           step="0.1"
+                           @bind="temporaryTest.Grade"
+                           disabled="@(temporaryTest.DueDate > DateOnly.FromDateTime(DateTime.Today))" />
                     <p></p>
+                    @if (temporaryTest.DueDate > DateOnly.FromDateTime(DateTime.Today))
+                    {
+                        <small class="text-muted">
+                            Grade can be entered after the test date.
+                        </small>
+                    }<br/>
                     <input type="submit" value="Finish">
                 </form>
             </div>

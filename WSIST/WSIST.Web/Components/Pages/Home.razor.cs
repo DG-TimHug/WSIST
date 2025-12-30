@@ -11,7 +11,7 @@ public partial class Home
     private readonly Test.Subjects selectedSubject;
     private readonly Test.TestVolume volume;
     private readonly Test.PersonalUnderstanding understanding;
-    private readonly double grade;
+    private readonly double? grade;
     private Test? localTest;
     private Test? temporaryTest;
     private Modes Mode { get; set; }

@@ -8,7 +8,7 @@ public class Test
     public DateOnly DueDate { get; set; }
     public TestVolume Volume { get; set; }
     public PersonalUnderstanding Understanding { get; set; }
-    public double Grade { get; set; }
+    public double? Grade { get; set; }
 
     public enum Subjects
     {
