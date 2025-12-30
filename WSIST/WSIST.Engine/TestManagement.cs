@@ -19,7 +19,14 @@ public class TestManagement
         return id;
     }
 
-    public void NewTestMaker(string title, string subject, DateOnly dueDate)
+    public void NewTestMaker(
+        string title,
+        Test.Subjects subject,
+        DateOnly dueDate,
+        Test.TestVolume volume,
+        Test.PersonalUnderstanding understanding,
+        double grade
+    )
     {
         Test newTest = new()
         {
@@ -27,6 +34,9 @@ public class TestManagement
             Title = title,
             Subject = subject,
             DueDate = dueDate,
+            Volume = volume,
+            Understanding = understanding,
+            Grade = grade,
         };
         Tests.Add(newTest);
         SaveTests(Tests);
@@ -48,14 +58,19 @@ public class TestManagement
         {
             string jsonString = File.ReadAllText(Filename);
             Tests = JsonSerializer.Deserialize<List<Test>>(jsonString);
-            if (string.IsNullOrWhiteSpace(jsonString))
-            {
-                return;
-            }
+            if (string.IsNullOrWhiteSpace(jsonString)) { }
         }
     }
 
-    public void TestEditor(Guid id, string title, string subject, DateOnly dueDate)
+    public void TestEditor(
+        Guid id,
+        string title,
+        Test.Subjects subject,
+        DateOnly dueDate,
+        Test.TestVolume volume,
+        Test.PersonalUnderstanding understanding,
+        double grade
+    )
     {
         foreach (var test in Tests)
         {
@@ -64,6 +79,9 @@ public class TestManagement
                 test.Subject = subject;
                 test.Title = title;
                 test.DueDate = dueDate;
+                test.Volume = volume;
+                test.Understanding = understanding;
+                test.Grade = grade;
                 SaveTests(Tests);
             }
         }
@@ -72,7 +90,7 @@ public class TestManagement
     public void TestRemover(Guid id)
     {
         var test = Tests.FirstOrDefault(test => test.Id == id);
-        if(test == null)
+        if (test == null)
             return;
         Tests.Remove(test);
         SaveTests(Tests);
@@ -81,6 +99,6 @@ public class TestManagement
     public void Refresh()
     {
         TestLoader();
+        Console.WriteLine("Refreshed");
     }
-
 }
