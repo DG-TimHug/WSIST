@@ -2,10 +2,15 @@
 @rendermode InteractiveServer
 @using WSIST.Engine
 <PageTitle>Home</PageTitle>
+<div class="top">
+    <h1>Your upcoming Tests</h1>
 
-<h1>Your upcoming Tests</h1>
+    Welcome to your Overview.
+    <button class="btn btn-primary refresh"@onclick="Refresh">
+        Refresh
+    </button>
+</div>
 
-Welcome to your Overview.
 <div>
     <table class="table">
         <thead>
@@ -37,9 +42,7 @@ Welcome to your Overview.
     <button class="btn btn-primary" @onclick="OpenAddTestModal">
         Add test
     </button>
-    <button class="btn btn-primary" @onclick="Refresh">
-        Refresh
-    </button>
+    
     
     
     @if (showAddTestModal)

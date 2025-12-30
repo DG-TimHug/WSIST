@@ -99,5 +99,6 @@ public class TestManagement
     public void Refresh()
     {
         TestLoader();
+        Console.WriteLine("Refreshed");
     }
 }
