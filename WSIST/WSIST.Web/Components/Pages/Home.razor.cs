@@ -4,84 +4,86 @@ namespace WSIST.Web.Components.Pages;
 
 public partial class Home
 {
-    private readonly TestManagement management = new TestManagement();
+    private readonly TestManagement management = new();
     private List<Test> tests = [];
     private string? testTitle;
     private DateOnly dueDate;
-    private Test.Subjects selectedSubject;
-    private Test.TestVolume volume;
-    private Test.PersonalUnderstanding understanding;
-    private double grade;
+    private readonly Test.Subjects selectedSubject;
+    private readonly Test.TestVolume volume;
+    private readonly Test.PersonalUnderstanding understanding;
+    private readonly double grade;
+    private Test? localTest;
+    private Modes Mode { get; set; }
 
     protected override void OnInitialized()
     {
         tests = management.Tests.ToList();
     }
 
-    // Add Test Modal
-    private bool showAddTestModal;
+    public Home(double grade, Test.PersonalUnderstanding understanding, Test.Subjects selectedSubject,
+        Test.TestVolume volume, bool showModal)
+    {
+        this.grade = grade;
+        this.understanding = understanding;
+        this.selectedSubject = selectedSubject;
+        this.volume = volume;
+        this.showModal = showModal;
+    }
+
+    public enum Modes
+    {
+        AddTest,
+        EditTest,
+        Off
+    }
+
+
+    //Modal
+
+    private bool showModal;
+
+    private void OpenModal(Modes modes)
+    {
+        showModal = true;
+    }
+
+    private void CloseModal()
+    {
+        showModal = false;
+        Refresh();
+    }
+
 
     private void OpenAddTestModal()
     {
         testTitle = "";
         dueDate = DateOnly.FromDateTime(DateTime.Today);
-        showAddTestModal = true;
     }
+    
 
-    private void CloseAddTestModal()
+    private void ModalSubmit()
     {
-        showAddTestModal = false;
-    }
-
-    private void AddTestSubmit()
-    {
-        management.NewTestMaker(testTitle, selectedSubject, dueDate, volume, understanding, grade);
-        CloseAddTestModal();
-        Refresh();
-    }
-
-    //Edit Test Modal
-
-    private bool showEditTestModal;
-    private Test? localTest;
-
-    private void OpenEditTestModal()
-    {
-        showEditTestModal = true;
-    }
-
-    private void OpenEdit(Test test)
-    {
-        localTest = new Test
+        switch (Mode)
         {
-            Id = test.Id,
-            Title = test.Title,
-            Subject = test.Subject,
-            DueDate = test.DueDate,
-            Volume = test.Volume,
-            Understanding = test.Understanding,
-            Grade = test.Grade,
-        };
-        OpenEditTestModal();
-    }
-
-    private void CloseEditTestModal()
-    {
-        showEditTestModal = false;
-    }
-
-    private void EditTestSubmit()
-    {
-        management.TestEditor(
-            localTest.Id,
-            localTest.Title,
-            localTest.Subject,
-            localTest.DueDate,
-            localTest.Volume,
-            localTest.Understanding,
-            localTest.Grade
-        );
-        CloseEditTestModal();
+            case Modes.AddTest:
+            {
+                management.NewTestMaker(testTitle, selectedSubject, dueDate, volume, understanding, grade);
+                break;
+            }
+            case Modes.EditTest:
+            {
+                management.TestEditor(
+                    localTest.Id,
+                    localTest.Title,
+                    localTest.Subject,
+                    localTest.DueDate,
+                    localTest.Volume,
+                    localTest.Understanding,
+                    localTest.Grade
+                );
+                break;
+            }
+        }
         Refresh();
     }
 
