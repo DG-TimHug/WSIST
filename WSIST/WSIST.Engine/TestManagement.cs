@@ -86,6 +86,21 @@ public class TestManagement
             }
         }
     }
+    
+    public void gradeAdder(
+        Guid id,
+        double grade
+    )
+    {
+        foreach (var test in Tests)
+        {
+            if (test.Id == id)
+            {
+                test.Grade = grade;
+                SaveTests(Tests);
+            }
+        }
+    }
 
     public void TestRemover(Guid id)
     {
