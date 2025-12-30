@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 
 namespace WSIST.Engine;
@@ -19,7 +20,7 @@ public class TestManagement
         return id;
     }
 
-    public void NewTestMaker(string title, Test.Subjects subject, DateOnly dueDate)
+    public void NewTestMaker(string title, Test.Subjects subject, DateOnly dueDate, Test.TestVolume volume, Test.PersonalUnderstanding understanding, double grade)
     {
         Test newTest = new()
         {
@@ -29,7 +30,7 @@ public class TestManagement
             DueDate = dueDate,
             Volume = volume,
             Understanding = understanding,
-            Grade = grade;
+            Grade = grade
         };
         Tests.Add(newTest);
         SaveTests(Tests);
@@ -57,7 +58,7 @@ public class TestManagement
         }
     }
 
-    public void TestEditor(Guid id, string title, Test.Subjects subject, DateOnly dueDate)
+    public void TestEditor(Guid id, string title, Test.Subjects subject, DateOnly dueDate, Test.TestVolume volume, Test.PersonalUnderstanding understanding, double grade)
     {
         foreach (var test in Tests)
         {
@@ -66,9 +67,9 @@ public class TestManagement
                 test.Subject = subject;
                 test.Title = title;
                 test.DueDate = dueDate;
-                test.Understanding = understanding;
                 test.Volume = volume;
-                test.Grade = Grade;
+                test.Understanding = understanding;
+                test.Grade = grade;
                 SaveTests(Tests);
             }
         }

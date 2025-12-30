@@ -35,7 +35,7 @@ public partial class Home
 
     private void AddTestSubmit()
     {
-        management.NewTestMaker(testTitle, selectedSubject, dueDate);
+        management.NewTestMaker(testTitle, selectedSubject, dueDate, volume, understanding, grade);
         CloseAddTestModal();
         Refresh();
     }
@@ -72,7 +72,7 @@ public partial class Home
 
     private void EditTestSubmit()
     {
-        management.TestEditor(localTest.Id, localTest.Title, localTest.Subject, localTest.DueDate);
+        management.TestEditor(localTest.Id, localTest.Title, localTest.Subject, localTest.DueDate, localTest.Volume, localTest.Understanding, localTest.Grade);
         CloseEditTestModal();
         Refresh();
     }
