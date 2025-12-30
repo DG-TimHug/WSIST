@@ -13,6 +13,8 @@ Welcome to your Overview.
             <th>Title</th>
             <th>Subject</th>
             <th>Date</th>
+            <th>Volume</th>
+            <th>Understanding</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -23,6 +25,8 @@ Welcome to your Overview.
                 <td>@test.Title</td>
                 <td>@test.Subject</td>
                 <td>@test.DueDate.ToShortDateString()</td>
+                <td>@test.Volume</td>
+                <td>@test.Understanding</td>
                 <td><button class="btn btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button> <button class="btn btn-primary" @onclick="() => OpenEdit(test)" @bind="localTest">
                     Edit test
                 </button></td>
@@ -55,7 +59,6 @@ Welcome to your Overview.
                     </select><br/>
                     <label for="TestDueDate">Due Date</label><br>
                     <input type="date" id="TestDueDate" name="dueDate" @bind="dueDate"><br/>
-                    <br/>
                     <label>Volume</label><br>
                     <select @bind="volume">
                         @foreach (var testVolume in Enum.GetValues<Test.TestVolume>())
@@ -70,9 +73,10 @@ Welcome to your Overview.
                             <option value="@personalUnderstanding">@personalUnderstanding</option>
                         }
                     </select><br/>
-                    <label for="grade">Test Title</label><br>
+                    <label for="grade">Grade</label><br>
                     <input type="number" id="grade" name="Title" @bind="grade"><br>
-                    <input type="submit" value="Submit"><br/>
+                    <p></p>
+                    <input type="submit" value="Submit">
                 </form>
             </div>
         </div>
@@ -96,13 +100,14 @@ Welcome to your Overview.
                     </select><br/>
                     <label for="TestDueDate">Due Date</label><br>
                     <input type="date" id="TestDueDate" name="dueDate" @bind="@localTest.DueDate"><br/>
-                    <br/>
+                    <label>Volume</label><br>
                     <select @bind="localTest.Volume">
                         @foreach (var testVolume in Enum.GetValues<Test.TestVolume>())
                         {
                             <option value="@testVolume">@testVolume</option>
                         }
                     </select><br/>
+                    <label>Personal Understanding</label><br>
                     <select @bind="localTest.Understanding">
                         @foreach (var personalUnderstanding in Enum.GetValues<Test.PersonalUnderstanding>())
                         {
@@ -110,8 +115,9 @@ Welcome to your Overview.
                         }
                     </select><br/>
                     <label for="testgrade">Grade</label><br>
-                    <input type="number" id="testgrade" name="Title" @bind="@localTest.Grade"><br>
-                    <input type="submit" value="Finish Editing"><br/>
+                    <input type="number" id="testgrade" name="Title" @bind="@localTest.Grade">
+                    <p></p>
+                    <input type="submit" value="Finish Editing">
                 </form>
             </div>
         </div>
