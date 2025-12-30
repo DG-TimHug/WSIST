@@ -14,6 +14,7 @@ public class Test
         French,
         German,
         Chemistry,
+        Other
     }
 
     //public static void Manual()

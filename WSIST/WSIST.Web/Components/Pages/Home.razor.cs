@@ -9,6 +9,7 @@ public partial class Home
     private string testTitle;
     private Test.Subjects subject;
     private DateOnly dueDate;
+    private Test.Subjects selectedSubject;
 
     protected override void OnInitialized()
     {
@@ -31,7 +32,7 @@ public partial class Home
 
     private void AddTestSubmit()
     {
-        management.NewTestMaker(testTitle, subject, dueDate);
+        management.NewTestMaker(testTitle, selectedSubject, dueDate);
         CloseAddTestModal();
         Refresh();
     }
