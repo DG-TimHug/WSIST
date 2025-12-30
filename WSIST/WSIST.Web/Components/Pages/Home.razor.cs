@@ -7,7 +7,7 @@ public partial class Home
     private readonly TestManagement management = new TestManagement();
     private List<Test> tests = new();
     private string testTitle;
-    private string subject;
+    private Test.Subjects subject;
     private DateOnly dueDate;
 
     protected override void OnInitialized()
@@ -20,7 +20,6 @@ public partial class Home
     private void OpenAddTestModal()
     {
         testTitle = "";
-        subject = "";
         dueDate = DateOnly.FromDateTime(DateTime.Today);
         showAddTestModal = true;
     }
@@ -53,7 +52,7 @@ public partial class Home
         {
             Id = test.Id,
             Title = test.Title,
-            Subjects = test.Subjects,
+            Subject = test.Subject,
             DueDate = test.DueDate
         };
         showEditTestModal = true;
@@ -67,7 +66,7 @@ public partial class Home
 
     private void EditTestSubmit()
     {
-        management.TestEditor(localTest.Id, localTest.Title, localTest.Subjects, localTest.DueDate);
+        management.TestEditor(localTest.Id, localTest.Title, localTest.Subject, localTest.DueDate);
         CloseEditTestModal();
         Refresh();
     }
