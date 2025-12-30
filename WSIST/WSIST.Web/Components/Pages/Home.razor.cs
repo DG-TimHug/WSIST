@@ -52,6 +52,7 @@ public partial class Home
     {
         temporaryTest = new Test();
         Mode = Modes.AddTest;
+        temporaryTest.DueDate = DateOnly.FromDateTime(DateTime.Today);
         showModal = true;
     }
 

@@ -51,6 +51,7 @@
                 <form class="text-center" @onsubmit="ModalSubmit">
                     <label for="testTitle">Test Title</label><br>
                     <input type="text" id="testTitle" name="Title" @bind="@temporaryTest.Title"><br>
+                    <label>Subject</label><br>
                     <select @bind="temporaryTest.Subject">
                         @foreach (var subject in Enum.GetValues<Test.Subjects>())
                         {
