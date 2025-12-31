@@ -43,7 +43,10 @@ public partial class Home
 
     public void OpenAddTestModal()
     {
-        temporaryTest = new Test();
+        temporaryTest = new Test
+        {
+            Title = "Some Test"
+        };
         Mode = Modes.AddTest;
         temporaryTest.DueDate = DateOnly.FromDateTime(DateTime.Today);
         showModal = true;

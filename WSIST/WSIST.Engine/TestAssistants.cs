@@ -2,8 +2,6 @@ namespace WSIST.Engine;
 
 public class TestAssistants
 {
-    private readonly TestManagement management = new();
-
     public static void GradeVerifier(DateOnly dueDate, double? grade)
     {
         if (dueDate > DateOnly.FromDateTime(DateTime.Today))
