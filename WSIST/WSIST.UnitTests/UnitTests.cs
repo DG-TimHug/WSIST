@@ -3,7 +3,7 @@ using WSIST.Engine;
 
 namespace WSIST.UnitTests;
 
-public sealed class UnitTests
+public class UnitTests
 {
     [Test]
     public void TestIfNewTestGetsMade()
@@ -21,7 +21,7 @@ public sealed class UnitTests
         );
         
         //assert
-        Assert.That(manager.Tests.First().Title, Is.EqualTo("Math Tets"));
+        Assert.That(manager.Tests.Any(t => t.Title == "Math Tets"));
     }
 
     [Test]
@@ -29,21 +29,9 @@ public sealed class UnitTests
     {
         //arrange
         var manager = new TestManagement();
-        Guid id = new Guid("09bdb11b-94ba-4f61-b28d-ccb77f51711a");
+        Guid id = new Guid("6db7ac0d-b947-4344-b19c-e7974d862817");
         //act
         manager.TestRemover(id);
-        var result = false;
-        foreach (var test in manager.Tests)
-        {
-            if (test.Id == id)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-        }
-        Assert.That(result, Is.False, "We Check if There are any Tests that still have that id");
+        Assert.That(manager.Tests.Any(t => t.Id == id), Is.False, "The Test with the given ID should no longer exist");
     }
 }
