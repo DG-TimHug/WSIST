@@ -45,7 +45,7 @@
                 <td>@Test.VolumeHelper(test.Volume)</td>
                 <td>@Test.UnderstandingHelper(test.Understanding)</td>
                 <td>
-                    <button class="button-primary btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button>
+                    <button class="button-primary button-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button>
                     <button class="button-primary" @bind="temporaryTest" @onclick="() => OpenEditTestModal(test)">
                         ✏️
                     </button>
@@ -58,7 +58,7 @@
         Add test
     </button>
 
-    @if (showModal)
+    @if (showModal && temporaryTest is not null)
     {
         <div class="wsist-modal">
             <div class="wsist-modal-content">
@@ -95,7 +95,7 @@
                                 value="@personalUnderstanding">@Test.UnderstandingHelper(personalUnderstanding)</option>
                         }
                     </select><br/>
-                    <label for="testgrade">Grade</label><br>
+                    <label>Grade</label><br>
                     <input type="number"
                            min="1"
                            max="6"
@@ -107,7 +107,8 @@
                         <small class="text-warning">
                             Grade can be entered after the test date.
                         </small>
-                    }<br/> 
+                    }
+                    <br/>
                     <input type="submit" value="Finish">
                 </form>
             </div>

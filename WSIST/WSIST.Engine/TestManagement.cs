@@ -4,8 +4,9 @@ namespace WSIST.Engine;
 
 public class TestManagement
 {
-    private const string Filename = @"C:\Development\Git Projects\WSIST\WSIST\WSIST.Engine\tests.json";
-    public List<Test>? Tests = new List<Test>();
+    private const string Filename =
+        @"C:\Development\Git Projects\WSIST\WSIST\WSIST.Engine\tests.json";
+    public List<Test> Tests = new List<Test>();
 
     public TestManagement()
     {
@@ -38,42 +39,9 @@ public class TestManagement
             Understanding = understanding,
             Grade = grade,
         };
-        GradeVerifier(dueDate, grade);
+        TestAssistants.GradeVerifier(dueDate, grade);
         Tests.Add(newTest);
         SaveTests(Tests);
-    }
-
-    private void SaveTests(List<Test> tests)
-    {
-        string json = JsonSerializer.Serialize(
-            tests,
-            new JsonSerializerOptions { WriteIndented = true }
-        );
-        File.WriteAllText(Filename, json);
-        Console.WriteLine(json);
-    }
-
-    private void TestLoader()
-    {
-        if (File.Exists(Filename))
-        {
-            string jsonString = File.ReadAllText(Filename);
-            Tests = JsonSerializer.Deserialize<List<Test>>(jsonString);
-            if (string.IsNullOrWhiteSpace(jsonString)) { }
-        }
-    }
-
-    private void GradeVerifier(DateOnly dueDate, double? grade)
-    {
-        if (dueDate > DateOnly.FromDateTime(DateTime.Today))
-        {
-            grade = null;
-        }
-
-        if (grade is not null && (grade < 1 || grade > 6))
-        {
-            throw new ArgumentOutOfRangeException(nameof(grade), "Grade must be between 1 and 6.");
-        }
     }
 
     public void TestEditor(
@@ -96,7 +64,7 @@ public class TestManagement
                 test.Volume = volume;
                 test.Understanding = understanding;
                 test.Grade = grade;
-                GradeVerifier(dueDate, grade);
+                TestAssistants.GradeVerifier(dueDate, grade);
                 SaveTests(Tests);
             }
         }
@@ -109,6 +77,26 @@ public class TestManagement
             return;
         Tests.Remove(test);
         SaveTests(Tests);
+    }
+
+    private void SaveTests(List<Test> tests)
+    {
+        string json = JsonSerializer.Serialize(
+            tests,
+            new JsonSerializerOptions { WriteIndented = true }
+        );
+        File.WriteAllText(Filename, json);
+        Console.WriteLine(json);
+    }
+
+    private void TestLoader()
+    {
+        if (File.Exists(Filename))
+        {
+            string jsonString = File.ReadAllText(Filename);
+            Tests = JsonSerializer.Deserialize<List<Test>>(jsonString) ?? [];
+            if (string.IsNullOrWhiteSpace(jsonString)) { }
+        }
     }
 
     public void Refresh()

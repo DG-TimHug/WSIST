@@ -2,8 +2,8 @@
 
 public class Test
 {
-    public Guid Id { get; set; }
-    public string Title { get; set; }
+    public Guid Id { get; init; }
+    public required string Title { get; set; }
     public Subjects Subject { get; set; }
     public DateOnly DueDate { get; set; }
     public TestVolume Volume { get; set; }
