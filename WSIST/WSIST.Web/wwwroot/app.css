@@ -20,13 +20,20 @@ html, body {
     border-radius: 10px;
     padding: 24px;
 }
-input, select, textarea {
-    background: #0f1115;
-    border: 1px solid var(--border-subtle);
+input,
+select,
+textarea {
+    width: 100%;
+    background: #11141a;
     color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
     padding: 12px 14px;
-    border-radius: 6px;
+    font-size: 15px;
+    line-height: 1.4;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
 }
+
 input:focus {
     border-color: var(--accent);
     outline: none;
@@ -167,15 +174,16 @@ h1:focus {
     background-color: var(--bg-elevated);
     margin: 12% auto; /* 15% from the top and centered */
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid var(--border-subtle);
     width: 15%; /* Could be more or less, depending on screen size */
-    height: 50%
+    height: 48%;
+    border-radius: 16px;
 }
 .wsist-modal-header{
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 32px;
+    justify-content: space-between;
+    margin-bottom: 14px;
 }
 .wsist-modal-title {
     font-size: 20px;
@@ -192,4 +200,23 @@ h1:focus {
 
 .wsist-modal-close:hover {
     color: var(--text-primary);
+}
+select {
+    appearance: none;
+    background-image:
+            linear-gradient(45deg, transparent 50%, var(--text-secondary) 50%),
+            linear-gradient(135deg, var(--text-secondary) 50%, transparent 50%);
+    background-position:
+            calc(100% - 18px) calc(50% - 3px),
+            calc(100% - 12px) calc(50% - 3px);
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 40px;
+}
+button,
+input[type="submit"] {
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 500;
 }
