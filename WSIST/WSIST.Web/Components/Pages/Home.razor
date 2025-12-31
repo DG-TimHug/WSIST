@@ -2,11 +2,23 @@
 @rendermode InteractiveServer
 @using WSIST.Engine
 <PageTitle>Home</PageTitle>
-<div class="top">
-    <h1>Your upcoming Tests</h1>
+<div class="page">
+    <div class="top-row">
+        <h3 class="title">WSIST</h3>
+        <button class="button-primary refresh" @onclick="Refresh">
+            Temporary Refresh
+        </button>
 
-    Welcome to your Overview.
-    <button class="btn btn-primary refresh"@onclick="Refresh">
+    </div>
+</div>
+
+<div class="top">
+    <div class="top-title">
+        <h1>Your upcoming Tests</h1>
+        <p class="top-subtitle">Welcome to your Overview.</p>
+    </div>
+    
+    <button class="button-primary refresh" @onclick="Refresh">
         🔄️
     </button>
 </div>
@@ -32,22 +44,30 @@
                 <td>@test.DueDate.ToShortDateString()</td>
                 <td>@Test.VolumeHelper(test.Volume)</td>
                 <td>@Test.UnderstandingHelper(test.Understanding)</td>
-                <td><button class="btn btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button> <button class="btn btn-primary" @bind="temporaryTest" @onclick="() => OpenEditTestModal(test)" >
-                    Edit test
-                </button></td>
+                <td>
+                    <button class="button-primary btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button>
+                    <button class="button-primary" @bind="temporaryTest" @onclick="() => OpenEditTestModal(test)">
+                        ✏️
+                    </button>
+                </td>
             </tr>
         }
         </tbody>
     </table>
-    <button class="btn btn-primary" @onclick="OpenAddTestModal">
+    <button class="button-primary" @onclick="OpenAddTestModal">
         Add test
     </button>
 
     @if (showModal)
     {
-        <div class="modal d-block">
-            <div class="modal-content">
-                <div class="close text-right" @onclick="CloseModal">X</div>
+        <div class="wsist-modal">
+            <div class="wsist-modal-content">
+                <div class="wsist-modal-header">
+                    <h2 class="wsist-modal-title">
+                        @(Mode == Modes.AddTest ? "Add test" : "Edit test")
+                    </h2>
+                    <button class="wsist-modal-close" @onclick="CloseModal">×</button>
+                </div>
                 <form class="text-center" @onsubmit="ModalSubmit">
                     <label for="testTitle">Test Title</label><br>
                     <input type="text" id="testTitle" name="Title" @bind="@temporaryTest.Title"><br>
@@ -59,7 +79,7 @@
                         }
                     </select><br/>
                     <label for="TestDueDate">Due Date</label><br>
-                    <input type="date" id="TestDueDate" name="dueDate" @bind="@temporaryTest.DueDate"><br/>
+                    <input type="date" id="TestDueDate" name="dueDate" @bind="@temporaryTest.DueDate" @bind:event="oninput"><br/>
                     <label>Volume</label><br>
                     <select @bind="temporaryTest.Volume">
                         @foreach (var testVolume in Enum.GetValues<Test.TestVolume>())
@@ -71,7 +91,8 @@
                     <select @bind="temporaryTest.Understanding">
                         @foreach (var personalUnderstanding in Enum.GetValues<Test.PersonalUnderstanding>())
                         {
-                            <option value="@personalUnderstanding">@Test.UnderstandingHelper(personalUnderstanding)</option>
+                            <option
+                                value="@personalUnderstanding">@Test.UnderstandingHelper(personalUnderstanding)</option>
                         }
                     </select><br/>
                     <label for="testgrade">Grade</label><br>
@@ -80,14 +101,13 @@
                            max="6"
                            step="0.1"
                            @bind="temporaryTest.Grade"
-                           disabled="@(temporaryTest.DueDate > DateOnly.FromDateTime(DateTime.Today))" />
-                    <p></p>
+                           disabled="@(temporaryTest.DueDate > DateOnly.FromDateTime(DateTime.Today))"/><br>
                     @if (temporaryTest.DueDate > DateOnly.FromDateTime(DateTime.Today))
                     {
-                        <small class="text-muted">
+                        <small class="text-warning">
                             Grade can be entered after the test date.
                         </small>
-                    }<br/>
+                    }<br/> 
                     <input type="submit" value="Finish">
                 </form>
             </div>
