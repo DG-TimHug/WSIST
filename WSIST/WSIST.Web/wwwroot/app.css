@@ -211,3 +211,9 @@ select {
     font-size: 15px;
     font-weight: 500;
 }
+.button-warning{
+    background: #ffc107;
+}
+.button-danger{
+    background: #dc3545;
+}

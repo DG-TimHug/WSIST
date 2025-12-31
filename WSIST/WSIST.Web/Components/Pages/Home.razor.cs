@@ -5,15 +5,7 @@ namespace WSIST.Web.Components.Pages;
 public partial class Home
 {
     private readonly TestManagement management = new();
-    private readonly TestAssistants assistants = new();
     private List<Test> tests = [];
-    private string? testTitle;
-    private DateOnly dueDate;
-    private readonly Test.Subjects selectedSubject;
-    private readonly Test.TestVolume volume;
-    private readonly Test.PersonalUnderstanding understanding;
-    private readonly double? grade;
-    private Test? localTest;
     private Test? temporaryTest;
     private Modes Mode { get; set; }
 
@@ -65,6 +57,8 @@ public partial class Home
 
     private void ModalSubmit()
     {
+        if (temporaryTest is null)
+            return;
         switch (Mode)
         {
             case Modes.AddTest:
@@ -100,7 +94,7 @@ public partial class Home
     private void Refresh()
     {
         management.Refresh();
-        tests = management.Tests!.ToList();
+        tests = management.Tests.ToList();
         StateHasChanged();
     }
 

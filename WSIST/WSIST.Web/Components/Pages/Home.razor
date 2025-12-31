@@ -45,7 +45,7 @@
                 <td>@Test.VolumeHelper(test.Volume)</td>
                 <td>@Test.UnderstandingHelper(test.Understanding)</td>
                 <td>
-                    <button class="button-primary btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button>
+                    <button class="button-primary button-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button>
                     <button class="button-primary" @bind="temporaryTest" @onclick="() => OpenEditTestModal(test)">
                         ✏️
                     </button>
