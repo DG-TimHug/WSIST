@@ -1,12 +1,11 @@
-﻿using WSIST.Engine;
+﻿using NUnit.Framework;
+using WSIST.Engine;
 
 namespace WSIST.UnitTests;
 
-[TestClass]
 public sealed class UnitTests
 {
-    [TestMethod]
-    [Obsolete("Obsolete")]
+    [Test]
     public void TestIfNewTestGetsMade()
     {
         //arrange
@@ -20,7 +19,31 @@ public sealed class UnitTests
             Test.PersonalUnderstanding.VeryLow,
             4.5
         );
+        
         //assert
-        Assert.Equals("Math Test", manager.Tests.First().Title);
+        Assert.That(manager.Tests.First().Title, Is.EqualTo("Math Tets"));
+    }
+
+    [Test]
+    public void CheckIfTestWasDeleted()
+    {
+        //arrange
+        var manager = new TestManagement();
+        Guid id = new Guid("09bdb11b-94ba-4f61-b28d-ccb77f51711a");
+        //act
+        manager.TestRemover(id);
+        var result = false;
+        foreach (var test in manager.Tests)
+        {
+            if (test.Id == id)
+            {
+                result = true;
+            }
+            else
+            {
+                result = false;
+            }
+        }
+        Assert.That(result, Is.False, "We Check if There are any Tests that still have that id");
     }
 }
