@@ -43,21 +43,12 @@ public partial class Home
 
     public void OpenAddTestModal()
     {
-        temporaryTest = new Test
-        {
-            Title = "Some Test"
-        };
+        temporaryTest = new Test { Title = "Some Test" };
         Mode = Modes.AddTest;
         temporaryTest.DueDate = DateOnly.FromDateTime(DateTime.Today);
         showModal = true;
     }
-
-    private void CloseModal()
-    {
-        showModal = false;
-        Refresh();
-    }
-
+    
     private void ModalSubmit()
     {
         if (temporaryTest is null)
@@ -91,6 +82,11 @@ public partial class Home
             }
         }
         CloseModal();
+        Refresh();
+    }
+    private void CloseModal()
+    {
+        showModal = false;
         Refresh();
     }
 
