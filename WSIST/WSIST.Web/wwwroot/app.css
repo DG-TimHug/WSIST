@@ -128,7 +128,8 @@ h1:focus {
 
 .top{
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 }
 .refresh{
     margin-left: auto;
@@ -176,14 +177,13 @@ h1:focus {
     padding: 20px;
     border: 1px solid var(--border-subtle);
     width: 15%; /* Could be more or less, depending on screen size */
-    height: 48%;
+    height: 47%;
     border-radius: 16px;
 }
 .wsist-modal-header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 14px;
 }
 .wsist-modal-title {
     font-size: 20px;

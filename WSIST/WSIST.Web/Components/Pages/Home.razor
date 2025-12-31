@@ -1,12 +1,13 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @using WSIST.Engine
-<a href="app.css"></a>
 <PageTitle>Home</PageTitle>
 <div class="top">
-    <h1>Your upcoming Tests</h1>
-
-    Welcome to your Overview.
+    <div class="top-title">
+        <h1>Your upcoming Tests</h1>
+        <p class="top-subtitle">Welcome to your Overview.</p>
+    </div>
+    
     <button class="btn btn-primary refresh" @onclick="Refresh">
         🔄️
     </button>
@@ -36,7 +37,7 @@
                 <td>
                     <button class="btn btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button>
                     <button class="btn btn-primary" @bind="temporaryTest" @onclick="() => OpenEditTestModal(test)">
-                        Edit test
+                        ✏️
                     </button>
                 </td>
             </tr>
@@ -68,7 +69,7 @@
                         }
                     </select><br/>
                     <label for="TestDueDate">Due Date</label><br>
-                    <input type="date" id="TestDueDate" name="dueDate" @bind="@temporaryTest.DueDate"><br/>
+                    <input type="date" id="TestDueDate" name="dueDate" @bind="@temporaryTest.DueDate" @bind:event="oninput"><br/>
                     <label>Volume</label><br>
                     <select @bind="temporaryTest.Volume">
                         @foreach (var testVolume in Enum.GetValues<Test.TestVolume>())
@@ -90,14 +91,13 @@
                            max="6"
                            step="0.1"
                            @bind="temporaryTest.Grade"
-                           disabled="@(temporaryTest.DueDate > DateOnly.FromDateTime(DateTime.Today))"/>
-                    <p></p>
+                           disabled="@(temporaryTest.DueDate > DateOnly.FromDateTime(DateTime.Today))"/><br>
                     @if (temporaryTest.DueDate > DateOnly.FromDateTime(DateTime.Today))
                     {
-                        <small class="text-primary">
+                        <small class="text-warning">
                             Grade can be entered after the test date.
                         </small>
-                    }
+                    }<br/> 
                     <input type="submit" value="Finish">
                 </form>
             </div>
