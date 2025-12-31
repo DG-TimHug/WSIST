@@ -49,9 +49,12 @@
 
     @if (showModal)
     {
-        <div class="modal d-block">
-            <div class="modal-content">
-                <div class="close text-right" @onclick="CloseModal">X</div>
+        <div class="wsist-modal">
+            <div class="wsist-modal-content">
+                <h2 class="wsist-modal-title">
+                    @(Mode == Modes.AddTest ? "Add test" : "Edit test")
+                </h2>
+                <button class="wsist-modal-close" @onclick="CloseModal">×</button>
                 <form class="text-center" @onsubmit="ModalSubmit">
                     <label for="testTitle">Test Title</label><br>
                     <input type="text" id="testTitle" name="Title" @bind="@temporaryTest.Title"><br>

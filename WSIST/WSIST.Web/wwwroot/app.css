@@ -118,18 +118,7 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
-.modal {
-    display: flex; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
+
 .top{
     display: flex;
     flex-direction: column;
@@ -137,19 +126,7 @@ h1:focus {
 .refresh{
     margin-left: auto;
 }
-/* Modal Content/Box */
-.modal-content {
-    flex-direction: column;
-    background-color: var(--bg-elevated);
-    margin: 12% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 15%; /* Could be more or less, depending on screen size */
-    height: 45%
 
-}
-
-/* The Close Button */
 .close {
     color: #aaa;
     float: right;
@@ -163,30 +140,7 @@ h1:focus {
     text-decoration: none;
     cursor: pointer;
 }
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-}
 
-.modal-title {
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--text-primary);
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.modal-close:hover {
-    color: var(--text-primary);
-}
 .form-group {
     margin-bottom: 24px;
 }
@@ -197,7 +151,45 @@ h1:focus {
     color: var(--text-secondary);
     margin-bottom: 6px;
 }
-.modal-content {
-    width: 440px;
-    padding: 32px;
+.wsist-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.wsist-modal-content{
+    flex-direction: column;
+    background-color: var(--bg-elevated);
+    margin: 12% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 15%; /* Could be more or less, depending on screen size */
+    height: 50%
+}
+.wsist-modal-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+.wsist-modal-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+.wsist-modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.wsist-modal-close:hover {
+    color: var(--text-primary);
 }
