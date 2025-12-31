@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSIST.Engine", "WSIST.Engin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSIST.Web", "WSIST.Web\WSIST.Web.csproj", "{BE9385DD-9512-49B3-B96D-99177F41F7E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSIST.UnitTests", "WSIST.UnitTests\WSIST.UnitTests.csproj", "{AF3202C8-664E-47F0-8987-82090D70F688}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{BE9385DD-9512-49B3-B96D-99177F41F7E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE9385DD-9512-49B3-B96D-99177F41F7E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE9385DD-9512-49B3-B96D-99177F41F7E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF3202C8-664E-47F0-8987-82090D70F688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF3202C8-664E-47F0-8987-82090D70F688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF3202C8-664E-47F0-8987-82090D70F688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF3202C8-664E-47F0-8987-82090D70F688}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
