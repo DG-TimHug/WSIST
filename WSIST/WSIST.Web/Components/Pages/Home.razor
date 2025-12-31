@@ -5,7 +5,7 @@
 <div class="page">
     <div class="top-row">
         <h3 class="title">WSIST</h3>
-        <button class="btn btn-primary refresh" @onclick="Refresh">
+        <button class="button-primary refresh" @onclick="Refresh">
             Temporary Refresh
         </button>
 
@@ -18,7 +18,7 @@
         <p class="top-subtitle">Welcome to your Overview.</p>
     </div>
     
-    <button class="btn btn-primary refresh" @onclick="Refresh">
+    <button class="button-primary refresh" @onclick="Refresh">
         🔄️
     </button>
 </div>
@@ -45,8 +45,8 @@
                 <td>@Test.VolumeHelper(test.Volume)</td>
                 <td>@Test.UnderstandingHelper(test.Understanding)</td>
                 <td>
-                    <button class="btn btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button>
-                    <button class="btn btn-primary" @bind="temporaryTest" @onclick="() => OpenEditTestModal(test)">
+                    <button class="button-primary btn-danger" @onclick="() => DeleteTest(test.Id)">🗑️</button>
+                    <button class="button-primary" @bind="temporaryTest" @onclick="() => OpenEditTestModal(test)">
                         ✏️
                     </button>
                 </td>
@@ -54,7 +54,7 @@
         }
         </tbody>
     </table>
-    <button class="btn btn-primary" @onclick="OpenAddTestModal">
+    <button class="button-primary" @onclick="OpenAddTestModal">
         Add test
     </button>
 

@@ -1,13 +1,10 @@
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
 :root {
-    --bg: #0f1115;              /* main background */
-    --bg-elevated: #15181e;     /* cards */
-    --text-primary: #e6e8eb;    /* main text */
-    --text-secondary: #a1a6b0;  /* meta text */
-    --border-subtle: #262a33;   /* dividers */
-    --accent: #5b8cff;          /* primary accent */
+    --bg: #0f1115;
+    --bg-elevated: #15181e;
+    --text-primary: #e6e8eb;
+    --text-secondary: #a1a6b0;
+    --border-subtle: #262a33;
+    --accent: #5b8cff;       
 }
 html, body {
     background: var(--bg);
@@ -55,44 +52,23 @@ button.primary {
     color: #0f1115;
     border-radius: 6px;
 }
-table {
-    background-color: var(--bg-elevated);
-    color: var(--text-primary);
-    border-collapse: collapse;
-}
-
-th, td {
-    background-color: var(--bg-elevated);
-    color: var(--text-primary);
-    border-color: var(--border-subtle);
-}
 .table {
     --bs-table-bg: var(--bg-elevated);
     --bs-table-color: var(--text-primary);
     --bs-table-border-color: var(--border-subtle);
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
 }
 
 .table th,
 .table td {
-    background-color: var(--bg-elevated) !important;
+    background-color: var(--bg-elevated);
     color: var(--text-primary);
+    border-color: var(--border-subtle);
 }
+
 .text-primary{
     color: var(--text-primary);
-}
-
-a, .btn-link {
-    color: #006bb7;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -182,16 +158,17 @@ h1:focus {
     z-index: 1000;
 }
 
-.wsist-modal-content{
+.wsist-modal-content {
+    display: flex;
     flex-direction: column;
-    background-color: var(--bg-elevated);
-    margin: 12% auto; /* 15% from the top and centered */
-    padding: 20px;
+    background: var(--bg-elevated);
     border: 1px solid var(--border-subtle);
-    width: 15%; /* Could be more or less, depending on screen size */
-    height: 47%;
     border-radius: 16px;
+    width: 440px;
+    max-width: calc(100vw - 48px);
+    padding: 32px;
 }
+
 .wsist-modal-header{
     display: flex;
     align-items: center;
@@ -225,8 +202,10 @@ select {
     background-repeat: no-repeat;
     padding-right: 40px;
 }
-button,
-input[type="submit"] {
+.button-primary {
+    background: var(--accent);
+    color: #0f1115;
+    border: none;
     border-radius: 10px;
     padding: 12px 20px;
     font-size: 15px;
