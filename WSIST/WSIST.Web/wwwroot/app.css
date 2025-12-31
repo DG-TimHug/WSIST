@@ -20,6 +20,18 @@ html, body {
     border-radius: 10px;
     padding: 24px;
 }
+.page {
+    display: flex;
+    flex-direction: column;
+}
+.top-row {
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--border-subtle);
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
 input,
 select,
 textarea {
