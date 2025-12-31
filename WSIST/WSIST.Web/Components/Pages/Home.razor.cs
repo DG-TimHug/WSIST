@@ -5,6 +5,7 @@ namespace WSIST.Web.Components.Pages;
 public partial class Home
 {
     private readonly TestManagement management = new();
+    private readonly TestAssistants assistants = new();
     private List<Test> tests = [];
     private string? testTitle;
     private DateOnly dueDate;
@@ -99,7 +100,7 @@ public partial class Home
     private void Refresh()
     {
         management.Refresh();
-        tests = management.Tests.ToList();
+        tests = management.Tests!.ToList();
         StateHasChanged();
     }
 
