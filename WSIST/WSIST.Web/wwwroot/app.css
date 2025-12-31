@@ -1,6 +1,66 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+:root {
+    --bg: #0f1115;              /* main background */
+    --bg-elevated: #15181e;     /* cards */
+    --text-primary: #e6e8eb;    /* main text */
+    --text-secondary: #a1a6b0;  /* meta text */
+    --border-subtle: #262a33;   /* dividers */
+    --accent: #5b8cff;          /* primary accent */
+}
+html, body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, sans-serif;
+}
+.cards {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 24px;
+}
+input, select, textarea {
+    background: #0f1115;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    padding: 12px 14px;
+    border-radius: 6px;
+}
+input:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+button.primary {
+    background: var(--accent);
+    color: #0f1115;
+    border-radius: 6px;
+}
+table {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+    border-collapse: collapse;
+}
+
+th, td {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--border-subtle);
+}
+.table {
+    --bs-table-bg: var(--bg-elevated);
+    --bs-table-color: var(--text-primary);
+    --bs-table-border-color: var(--border-subtle);
+}
+
+.table th,
+.table td {
+    background-color: var(--bg-elevated) !important;
+    color: var(--text-primary);
+}
+.text-primary{
+    color: var(--text-primary);
+}
 
 a, .btn-link {
     color: #006bb7;
@@ -57,4 +117,87 @@ h1:focus {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
+}
+.modal {
+    display: flex; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.top{
+    display: flex;
+    flex-direction: column;
+}
+.refresh{
+    margin-left: auto;
+}
+/* Modal Content/Box */
+.modal-content {
+    flex-direction: column;
+    background-color: var(--bg-elevated);
+    margin: 12% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 15%; /* Could be more or less, depending on screen size */
+    height: 45%
+
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+.modal-content {
+    width: 440px;
+    padding: 32px;
 }
