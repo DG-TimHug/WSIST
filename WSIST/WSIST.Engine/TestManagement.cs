@@ -63,8 +63,7 @@ public class TestManagement
                 test.DueDate = dueDate;
                 test.Volume = volume;
                 test.Understanding = understanding;
-                test.Grade = grade;
-                TestAssistants.GradeVerifier(dueDate, grade);
+                test.Grade = TestAssistants.GradeVerifier(dueDate, grade);
                 SaveTests(Tests);
             }
         }
