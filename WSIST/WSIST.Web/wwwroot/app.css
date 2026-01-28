@@ -52,20 +52,66 @@ button.primary {
     color: #0f1115;
     border-radius: 6px;
 }
+/* ===== WSIST TABLE FIX ===== */
+
 .table {
-    --bs-table-bg: var(--bg-elevated);
-    --bs-table-color: var(--text-primary);
-    --bs-table-border-color: var(--border-subtle);
-    background-color: var(--bg-elevated);
-    color: var(--text-primary);
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
 }
 
+/* Header + cells spacing */
 .table th,
 .table td {
-    background-color: var(--bg-elevated);
-    color: var(--text-primary);
-    border-color: var(--border-subtle);
+    padding: 12px 14px;
+    vertical-align: middle;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+/* Column sizing */
+.table th:nth-child(1),
+.table td:nth-child(1) { width: 28%; } /* Title */
+
+.table th:nth-child(2),
+.table td:nth-child(2) { width: 14%; } /* Subject */
+
+.table th:nth-child(3),
+.table td:nth-child(3) { width: 14%; } /* Date */
+
+.table th:nth-child(4),
+.table td:nth-child(4) { width: 14%; } /* Volume */
+
+.table th:nth-child(5),
+.table td:nth-child(5) { width: 16%; } /* Understanding */
+
+.table th:nth-child(6),
+.table td:nth-child(6) { width: 14%; } /* Actions */
+
+
+/* Actions column alignment */
+.table td:last-child {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Button sizing consistency */
+.table .button-danger,
+.table .button-primary,
+.table .button-warning {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* Hover row effect (nice UX) */
+.table tbody tr:hover {
+    background-color: rgba(255,255,255,0.03);
+}
+
 
 .text-primary{
     color: var(--text-primary);
@@ -216,4 +262,17 @@ select {
 }
 .button-danger{
     background: #dc3545;
+}
+/* Let actions column breathe */
+.table td:last-child {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    white-space: normal;
+    overflow: visible;
+}
+
+/* Remove clipping only for actions */
+.table td:last-child {
+    text-overflow: unset;
 }

@@ -1,16 +1,20 @@
+using Microsoft.AspNetCore.Components;
 using WSIST.Engine;
 
 namespace WSIST.Web.Components.Pages;
 
 public partial class Home
 {
-    private readonly TestManagement management = new();
+    [Inject]
+    private TestManagement management { get; set; } = default!;
+
     private List<Test> tests = [];
     private Test? temporaryTest;
     private Modes Mode { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await management.LoadAsync();
         tests = management.Tests.ToList();
     }
 
@@ -20,7 +24,7 @@ public partial class Home
         EditTest,
     }
 
-    //Modal
+    // Modal
 
     private bool showModal;
 
@@ -38,6 +42,7 @@ public partial class Home
             Understanding = test.Understanding,
             Grade = test.Grade,
         };
+
         showModal = true;
     }
 
@@ -48,16 +53,16 @@ public partial class Home
         temporaryTest.DueDate = DateOnly.FromDateTime(DateTime.Today);
         showModal = true;
     }
-    
-    private void ModalSubmit()
+
+    private async Task ModalSubmit()
     {
         if (temporaryTest is null)
             return;
+
         switch (Mode)
         {
             case Modes.AddTest:
-            {
-                management.NewTestMaker(
+                await management.NewTestMaker(
                     temporaryTest.Title,
                     temporaryTest.Subject,
                     temporaryTest.DueDate,
@@ -66,10 +71,9 @@ public partial class Home
                     temporaryTest.Grade
                 );
                 break;
-            }
+
             case Modes.EditTest:
-            {
-                management.TestEditor(
+                await management.TestEditor(
                     temporaryTest.Id,
                     temporaryTest.Title,
                     temporaryTest.Subject,
@@ -79,27 +83,27 @@ public partial class Home
                     temporaryTest.Grade
                 );
                 break;
-            }
         }
+
         CloseModal();
-        Refresh();
+        await Refresh();
     }
+
     private void CloseModal()
     {
         showModal = false;
-        Refresh();
     }
 
-    private void Refresh()
+    private async Task Refresh()
     {
-        management.Refresh();
+        await management.Refresh();
         tests = management.Tests.ToList();
         StateHasChanged();
     }
 
-    private void DeleteTest(Guid id)
+    private async Task DeleteTest(Guid id)
     {
-        management.TestRemover(id);
-        Refresh();
+        await management.TestRemover(id);
+        await Refresh();
     }
 }

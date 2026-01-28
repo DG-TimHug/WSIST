@@ -1,26 +1,30 @@
-using System.Text.Json;
+using WSIST.Engine.Persistence;
 
 namespace WSIST.Engine;
 
 public class TestManagement
 {
-    private const string Filename =
-        @"C:\Development\Git Projects\WSIST\WSIST\WSIST.Engine\tests.json";
-    public List<Test> Tests = new();
+    private readonly ITestRepository _repository;
 
-    public TestManagement()
+    public List<Test> Tests { get; private set; } = new();
+
+    public TestManagement(ITestRepository repository)
     {
-        TestLoader();
+        _repository = repository;
     }
 
     private static Guid IdMaker()
     {
-        var id = Guid.NewGuid();
-        Console.Write(id);
-        return id;
+        return Guid.NewGuid();
     }
 
-    public void NewTestMaker(
+    // Load all tests from DB
+    public async Task LoadAsync()
+    {
+        Tests = await _repository.GetAllAsync();
+    }
+
+    public async Task NewTestMaker(
         string title,
         Test.Subjects subject,
         DateOnly dueDate,
@@ -39,12 +43,16 @@ public class TestManagement
             Understanding = understanding,
             Grade = grade,
         };
+
         TestAssistants.GradeVerifier(dueDate, grade);
+
+        await _repository.AddAsync(newTest);
+
+        // keep in-memory list in sync
         Tests.Add(newTest);
-        SaveTests(Tests);
     }
 
-    public void TestEditor(
+    public async Task TestEditor(
         Guid id,
         string title,
         Test.Subjects subject,
@@ -54,53 +62,32 @@ public class TestManagement
         double? grade
     )
     {
-        foreach (var test in Tests)
-        {
-            if (test.Id == id)
-            {
-                test.Subject = subject;
-                test.Title = title;
-                test.DueDate = dueDate;
-                test.Volume = volume;
-                test.Understanding = understanding;
-                test.Grade = TestAssistants.GradeVerifier(dueDate, grade);
-                SaveTests(Tests);
-            }
-        }
-    }
-
-    public void TestRemover(Guid id)
-    {
-        var test = Tests.FirstOrDefault(test => test.Id == id);
+        var test = Tests.FirstOrDefault(t => t.Id == id);
         if (test == null)
             return;
+
+        test.Subject = subject;
+        test.Title = title;
+        test.DueDate = dueDate;
+        test.Volume = volume;
+        test.Understanding = understanding;
+        test.Grade = TestAssistants.GradeVerifier(dueDate, grade);
+
+        await _repository.UpdateAsync(test);
+    }
+
+    public async Task TestRemover(Guid id)
+    {
+        var test = Tests.FirstOrDefault(t => t.Id == id);
+        if (test == null)
+            return;
+
         Tests.Remove(test);
-        SaveTests(Tests);
+        await _repository.DeleteAsync(id);
     }
 
-    private void SaveTests(List<Test> tests)
+    public async Task Refresh()
     {
-        string json = JsonSerializer.Serialize(
-            tests,
-            new JsonSerializerOptions { WriteIndented = true }
-        );
-        File.WriteAllText(Filename, json);
-        Console.WriteLine(json);
-    }
-
-    private void TestLoader()
-    {
-        if (File.Exists(Filename))
-        {
-            string jsonString = File.ReadAllText(Filename);
-            Tests = JsonSerializer.Deserialize<List<Test>>(jsonString) ?? [];
-            if (string.IsNullOrWhiteSpace(jsonString)) { }
-        }
-    }
-
-    public void Refresh()
-    {
-        TestLoader();
-        Console.WriteLine("Refreshed");
+        await LoadAsync();
     }
 }
