@@ -2,9 +2,8 @@ using WSIST.Engine;
 
 namespace WSIST.Web.Components.Pages;
 
-public partial class Home
+public partial class Home(TestManagement management)
 {
-    private readonly TestManagement management = new();
     private List<Test> tests = [];
     private Test? temporaryTest;
     private Modes Mode { get; set; }

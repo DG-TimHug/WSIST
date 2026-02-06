@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Data.SqlClient;
 
 namespace WSIST.Engine;
 
@@ -8,8 +9,13 @@ public class TestManagement
         @"C:\Development\Git Projects\WSIST\WSIST\WSIST.Engine\tests.json";
     public List<Test> Tests = new();
 
-    public TestManagement()
+    public TestManagement(Database database)
     {
+        database.Query("SELECT * FROM Test WHERE Id = @Id", new Dictionary<string, object>
+        {
+            { "Id", 123 }
+        });
+        
         TestLoader();
     }
 
