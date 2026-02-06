@@ -14,7 +14,7 @@ public class Database
         Connection.Open();
     }
 
-    public DataTable Query(string sqlQuery, Dictionary<string, object>? parameters)
+    public DataTable Query(string sqlQuery, Dictionary<string, object>? parameters = null)
     {
         using var command = new SqlCommand(
             sqlQuery,

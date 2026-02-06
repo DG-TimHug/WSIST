@@ -1,3 +1,4 @@
+using System.Data;
 using System.Text.Json;
 using Microsoft.Data.SqlClient;
 
@@ -5,6 +6,8 @@ namespace WSIST.Engine;
 
 public class TestManagement
 {
+    private Database database;
+    
     private const string Filename =
         @"C:\Development\Git Projects\WSIST\WSIST\WSIST.Engine\tests.json";
     public List<Test> Tests = new();
@@ -19,12 +22,7 @@ public class TestManagement
         TestLoader();
     }
 
-    private static Guid IdMaker()
-    {
-        var id = Guid.NewGuid();
-        Console.Write(id);
-        return id;
-    }
+    
 
     public void NewTestMaker(
         string title,
@@ -37,7 +35,6 @@ public class TestManagement
     {
         Test newTest = new()
         {
-            Id = IdMaker(),
             Title = title,
             Subject = subject,
             DueDate = dueDate,
@@ -51,7 +48,7 @@ public class TestManagement
     }
 
     public void TestEditor(
-        Guid id,
+        int id,
         string title,
         Test.Subjects subject,
         DateOnly dueDate,
@@ -75,7 +72,7 @@ public class TestManagement
         }
     }
 
-    public void TestRemover(Guid id)
+    public void TestRemover(int id)
     {
         var test = Tests.FirstOrDefault(test => test.Id == id);
         if (test == null)
@@ -86,22 +83,29 @@ public class TestManagement
 
     private void SaveTests(List<Test> tests)
     {
-        string json = JsonSerializer.Serialize(
-            tests,
-            new JsonSerializerOptions { WriteIndented = true }
-        );
-        File.WriteAllText(Filename, json);
-        Console.WriteLine(json);
+        // database.Query("") // TODO: Refactor to load single test instead of all tests
     }
 
-    private void TestLoader()
+    private DataTable LoadAllTests()
     {
-        if (File.Exists(Filename))
-        {
-            string jsonString = File.ReadAllText(Filename);
-            Tests = JsonSerializer.Deserialize<List<Test>>(jsonString) ?? [];
-            if (string.IsNullOrWhiteSpace(jsonString)) { }
-        }
+        return database.Query("SELECT title, subject, duedate, volume, understanding FROM tests;");
+    }
+    
+    private Test LoadTest(int id)
+    {
+        var dataTable = database.Query(
+            "SELECT title, subject, duedate, volume, understanding FROM tests WHERE id = @id;",
+            new Dictionary<string, object>
+            {
+                { "id", id }
+            }
+        );
+
+        Test Test;
+        
+        Test.Title = dataTable.Rows[0]["Title"].ToString();
+        
+        return new Test();
     }
 
     public void Refresh()

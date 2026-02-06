@@ -2,7 +2,7 @@
 
 public class Test
 {
-    public Guid Id { get; init; }
+    public int Id { get; init; }
     public required string Title { get; set; }
     public Subjects Subject { get; set; }
     public DateOnly DueDate { get; set; }
