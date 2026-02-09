@@ -15,16 +15,13 @@ public class TestManagement
         {
             { "Id", 123 }
         });
-        
     }
-
     
     //TODO: Global
     // - Remove all mentions of the List test and load tests individually
     // - Rewrite Save and Load methods
     // - Figure out how Tests now need to be saved...
     
-
     public void NewTestMaker(
         string title,
         Test.Subjects subject,
@@ -44,7 +41,7 @@ public class TestManagement
             Grade = grade,
         };
         TestAssistants.GradeVerifier(dueDate, grade);
-        SaveTests(Tests);
+        SaveTests(subject, title, dueDate, volume, understanding, grade);
     }
 
     public void TestEditor(
@@ -98,7 +95,7 @@ public class TestManagement
         return database.Query("SELECT title, subject, duedate, volume, understanding FROM tests;");
     }
     
-    private Test LoadTest(int id)
+    private Test LoadTest(int id) // Holy chaos figure out how to load specific Test based on Pokedex
     {
         var dataTable = database.Query(
             "SELECT title, subject, duedate, volume, understanding FROM tests WHERE id = @id;",
