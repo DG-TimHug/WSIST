@@ -8,9 +8,6 @@ public class TestManagement
 {
     private Database database;
     
-    private const string Filename =
-        @"C:\Development\Git Projects\WSIST\WSIST\WSIST.Engine\tests.json";
-    public List<Test> Tests = new();
 
     public TestManagement(Database database)
     {
@@ -19,9 +16,13 @@ public class TestManagement
             { "Id", 123 }
         });
         
-        TestLoader();
     }
 
+    
+    //TODO: Global
+    // - Remove all mentions of the List test and load tests individually
+    // - Rewrite Save and Load methods
+    // - Figure out how Tests now need to be saved...
     
 
     public void NewTestMaker(
@@ -43,7 +44,6 @@ public class TestManagement
             Grade = grade,
         };
         TestAssistants.GradeVerifier(dueDate, grade);
-        Tests.Add(newTest);
         SaveTests(Tests);
     }
 
@@ -57,7 +57,7 @@ public class TestManagement
         double? grade
     )
     {
-        foreach (var test in Tests)
+        foreach (var test in Tests) // TODO: Figure Out how tests need to be saved because this shi wont work anymore
         {
             if (test.Id == id)
             {
@@ -67,23 +67,30 @@ public class TestManagement
                 test.Volume = volume;
                 test.Understanding = understanding;
                 test.Grade = TestAssistants.GradeVerifier(dueDate, grade);
-                SaveTests(Tests);
+                SaveTests(subject, title, dueDate, volume, understanding, grade);
             }
         }
     }
 
     public void TestRemover(int id)
     {
-        var test = Tests.FirstOrDefault(test => test.Id == id);
-        if (test == null)
-            return;
-        Tests.Remove(test);
-        SaveTests(Tests);
+        var dataTable = database.Query(
+            "DELETE *  FROM tests WHERE id = @id;",
+            new Dictionary<string, object>
+            {
+                { "id", id }
+            }
+        );
     }
 
-    private void SaveTests(List<Test> tests)
+    private void SaveTests(Test.Subjects subjects,
+        string title,
+        DateOnly dueDate,
+        Test.TestVolume volume,
+        Test.PersonalUnderstanding understanding,
+        double? grade)
     {
-        // database.Query("") // TODO: Refactor to load single test instead of all tests
+        // database.Query("") // TODO: Create insert Statment that saves a singele Test into the Database...
     }
 
     private DataTable LoadAllTests()
@@ -101,16 +108,16 @@ public class TestManagement
             }
         );
 
-        Test Test;
+        Test test;
         
-        Test.Title = dataTable.Rows[0]["Title"].ToString();
+        test.Title = dataTable.Rows[0]["Title"].ToString();
         
         return new Test();
     }
 
     public void Refresh()
     {
-        TestLoader();
+        LoadAllTests();
         Console.WriteLine("Refreshed");
     }
 }

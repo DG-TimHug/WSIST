@@ -96,7 +96,7 @@ public partial class Home(TestManagement management)
         StateHasChanged();
     }
 
-    private void DeleteTest(Guid id)
+    private void DeleteTest(int id)
     {
         management.TestRemover(id);
         Refresh();
