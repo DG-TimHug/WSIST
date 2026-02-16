@@ -1,25 +1,27 @@
+using System.Data;
 using System.Text.Json;
+using Microsoft.Data.SqlClient;
 
 namespace WSIST.Engine;
 
 public class TestManagement
 {
-    private const string Filename =
-        @"C:\Development\Git Projects\WSIST\WSIST\WSIST.Engine\tests.json";
-    public List<Test> Tests = new();
+    private Database database;
+    
 
-    public TestManagement()
+    public TestManagement(Database database)
     {
-        TestLoader();
+        database.Query("SELECT * FROM Test WHERE Id = @Id", new Dictionary<string, object>
+        {
+            { "Id", 123 }
+        });
     }
-
-    private static Guid IdMaker()
-    {
-        var id = Guid.NewGuid();
-        Console.Write(id);
-        return id;
-    }
-
+    
+    //TODO: Global
+    // - Remove all mentions of the List test and load tests individually
+    // - Rewrite Save and Load methods
+    // - Figure out how Tests now need to be saved...
+    
     public void NewTestMaker(
         string title,
         Test.Subjects subject,
@@ -31,7 +33,6 @@ public class TestManagement
     {
         Test newTest = new()
         {
-            Id = IdMaker(),
             Title = title,
             Subject = subject,
             DueDate = dueDate,
@@ -40,12 +41,11 @@ public class TestManagement
             Grade = grade,
         };
         TestAssistants.GradeVerifier(dueDate, grade);
-        Tests.Add(newTest);
-        SaveTests(Tests);
+        SaveTests(subject, title, dueDate, volume, understanding, grade);
     }
 
     public void TestEditor(
-        Guid id,
+        int id,
         string title,
         Test.Subjects subject,
         DateOnly dueDate,
@@ -54,7 +54,7 @@ public class TestManagement
         double? grade
     )
     {
-        foreach (var test in Tests)
+        foreach (var test in Tests) // TODO: Figure Out how tests need to be saved because this shi wont work anymore
         {
             if (test.Id == id)
             {
@@ -64,43 +64,57 @@ public class TestManagement
                 test.Volume = volume;
                 test.Understanding = understanding;
                 test.Grade = TestAssistants.GradeVerifier(dueDate, grade);
-                SaveTests(Tests);
+                SaveTests(subject, title, dueDate, volume, understanding, grade);
             }
         }
     }
 
-    public void TestRemover(Guid id)
+    public void TestRemover(int id)
     {
-        var test = Tests.FirstOrDefault(test => test.Id == id);
-        if (test == null)
-            return;
-        Tests.Remove(test);
-        SaveTests(Tests);
-    }
-
-    private void SaveTests(List<Test> tests)
-    {
-        string json = JsonSerializer.Serialize(
-            tests,
-            new JsonSerializerOptions { WriteIndented = true }
+        var dataTable = database.Query(
+            "DELETE *  FROM tests WHERE id = @id;",
+            new Dictionary<string, object>
+            {
+                { "id", id }
+            }
         );
-        File.WriteAllText(Filename, json);
-        Console.WriteLine(json);
     }
 
-    private void TestLoader()
+    private void SaveTests(Test.Subjects subjects,
+        string title,
+        DateOnly dueDate,
+        Test.TestVolume volume,
+        Test.PersonalUnderstanding understanding,
+        double? grade)
     {
-        if (File.Exists(Filename))
-        {
-            string jsonString = File.ReadAllText(Filename);
-            Tests = JsonSerializer.Deserialize<List<Test>>(jsonString) ?? [];
-            if (string.IsNullOrWhiteSpace(jsonString)) { }
-        }
+        // database.Query("") // TODO: Create insert Statment that saves a singele Test into the Database...
+    }
+
+    private DataTable LoadAllTests()
+    {
+        return database.Query("SELECT title, subject, duedate, volume, understanding FROM tests;");
+    }
+    
+    private Test LoadTest(int id) // Holy chaos figure out how to load specific Test based on Pokedex
+    {
+        var dataTable = database.Query(
+            "SELECT title, subject, duedate, volume, understanding FROM tests WHERE id = @id;",
+            new Dictionary<string, object>
+            {
+                { "id", id }
+            }
+        );
+
+        Test test;
+        
+        test.Title = dataTable.Rows[0]["Title"].ToString();
+        
+        return new Test();
     }
 
     public void Refresh()
     {
-        TestLoader();
+        LoadAllTests();
         Console.WriteLine("Refreshed");
     }
 }

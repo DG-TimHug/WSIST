@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddSingleton<TestManagement>();
 
+var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection") ?? throw new ArgumentException("Missing Connection String.");
+builder.Services.Configure<DatabaseOption>(options => options.ConnectionString = connectionString);
+builder.Services.AddScoped<Database>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
