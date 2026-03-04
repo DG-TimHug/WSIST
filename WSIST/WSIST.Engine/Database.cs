@@ -6,18 +6,18 @@ namespace WSIST.Engine;
 
 public class Database
 {
-    private readonly string _connectionString;
+    private readonly string connectionString;
 
     public Database(IOptions<DatabaseOption> options)
     {
-        _connectionString = options.Value.ConnectionString;
+        connectionString = options.Value.ConnectionString;
     }
 
     public DataTable Query(string sqlQuery, Dictionary<string, object>? parameters = null)
     {
-        using var connection = new MySqlConnection(_connectionString);
+        using var connection = new MySqlConnection(connectionString);
         connection.Open();
-        
+
         using var command = new MySqlCommand(sqlQuery, connection);
 
         if (parameters != null)

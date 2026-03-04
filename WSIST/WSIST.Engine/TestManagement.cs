@@ -5,12 +5,12 @@ namespace WSIST.Engine;
 public class TestManagement
 {
     private Database database;
-    
+
     public TestManagement(Database database)
     {
         this.database = database;
     }
-    
+
     public void NewTestMaker(
         string title,
         Test.Subjects subject,
@@ -33,13 +33,20 @@ public class TestManagement
         SaveTests(subject, title, dueDate, volume, understanding, grade);
     }
 
-    public void TestEditor(int id, string title, Test.Subjects subject, DateOnly dueDate,
-        Test.TestVolume volume, Test.PersonalUnderstanding understanding, double? grade)
+    public void TestEditor(
+        int id,
+        string title,
+        Test.Subjects subject,
+        DateOnly dueDate,
+        Test.TestVolume volume,
+        Test.PersonalUnderstanding understanding,
+        double? grade
+    )
     {
         var verifiedGrade = TestAssistants.GradeVerifier(dueDate, grade);
         database.Query(
-            "UPDATE Tests SET Title=@Title, Subject=@Subject, DueDate=@DueDate, " +
-            "Volume=@Volume, Understanding=@Understanding, Grade=@Grade WHERE Id=@Id;",
+            "UPDATE Tests SET Title=@Title, Subject=@Subject, DueDate=@DueDate, "
+                + "Volume=@Volume, Understanding=@Understanding, Grade=@Grade WHERE Id=@Id;",
             new Dictionary<string, object>
             {
                 { "Id", id },
@@ -48,7 +55,7 @@ public class TestManagement
                 { "DueDate", dueDate.ToDateTime(TimeOnly.MinValue) },
                 { "Volume", (int)volume },
                 { "Understanding", (int)understanding },
-                { "Grade", (object?)verifiedGrade ?? DBNull.Value }
+                { "Grade", (object?)verifiedGrade ?? DBNull.Value },
             }
         );
     }
@@ -57,19 +64,22 @@ public class TestManagement
     {
         var dataTable = database.Query(
             "DELETE FROM Tests WHERE Id = @Id;",
-            new Dictionary<string, object>
-            {
-                { "id", id }
-            }
+            new Dictionary<string, object> { { "id", id } }
         );
     }
 
-    private void SaveTests(Test.Subjects subject, string title, DateOnly dueDate,
-        Test.TestVolume volume, Test.PersonalUnderstanding understanding, double? grade)
+    private void SaveTests(
+        Test.Subjects subject,
+        string title,
+        DateOnly dueDate,
+        Test.TestVolume volume,
+        Test.PersonalUnderstanding understanding,
+        double? grade
+    )
     {
         database.Query(
-            "INSERT INTO Tests (Title, Subject, DueDate, Volume, Understanding, Grade) " +
-            "VALUES (@Title, @Subject, @DueDate, @Volume, @Understanding, @Grade);",
+            "INSERT INTO Tests (Title, Subject, DueDate, Volume, Understanding, Grade) "
+                + "VALUES (@Title, @Subject, @DueDate, @Volume, @Understanding, @Grade);",
             new Dictionary<string, object>
             {
                 { "Title", title },
@@ -77,7 +87,7 @@ public class TestManagement
                 { "DueDate", dueDate.ToDateTime(TimeOnly.MinValue) },
                 { "Volume", (int)volume },
                 { "Understanding", (int)understanding },
-                { "Grade", (object?)grade ?? DBNull.Value }
+                { "Grade", (object?)grade ?? DBNull.Value },
             }
         );
     }
@@ -91,20 +101,23 @@ public class TestManagement
         var tests = new List<Test>();
         foreach (DataRow row in dataTable.Rows)
         {
-            tests.Add(new Test
-            {
-                Id            = Convert.ToInt32(row["Id"]),
-                Title         = row["Title"].ToString()!,
-                Subject       = (Test.Subjects)Convert.ToInt32(row["Subject"]),
-                DueDate       = DateOnly.FromDateTime((DateTime)row["DueDate"]),
-                Volume        = (Test.TestVolume)Convert.ToInt32(row["Volume"]),
-                Understanding = (Test.PersonalUnderstanding)Convert.ToInt32(row["Understanding"]),
-                Grade         = row["Grade"] == DBNull.Value ? null : (double?)row["Grade"],
-            });
+            tests.Add(
+                new Test
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Title = row["Title"].ToString()!,
+                    Subject = (Test.Subjects)Convert.ToInt32(row["Subject"]),
+                    DueDate = DateOnly.FromDateTime((DateTime)row["DueDate"]),
+                    Volume = (Test.TestVolume)Convert.ToInt32(row["Volume"]),
+                    Understanding = (Test.PersonalUnderstanding)
+                        Convert.ToInt32(row["Understanding"]),
+                    Grade = row["Grade"] == DBNull.Value ? null : (double?)row["Grade"],
+                }
+            );
         }
         return tests;
     }
-    
+
     private Test LoadTest(int id)
     {
         var dataTable = database.Query(
@@ -118,13 +131,13 @@ public class TestManagement
         var row = dataTable.Rows[0];
         return new Test
         {
-            Id            = Convert.ToInt32(row["Id"]),
-            Title         = row["Title"].ToString()!,
-            Subject       = (Test.Subjects)(int)row["Subject"],
-            DueDate       = DateOnly.FromDateTime((DateTime)row["DueDate"]),
-            Volume        = (Test.TestVolume)(int)row["Volume"],
+            Id = Convert.ToInt32(row["Id"]),
+            Title = row["Title"].ToString()!,
+            Subject = (Test.Subjects)(int)row["Subject"],
+            DueDate = DateOnly.FromDateTime((DateTime)row["DueDate"]),
+            Volume = (Test.TestVolume)(int)row["Volume"],
             Understanding = (Test.PersonalUnderstanding)(int)row["Understanding"],
-            Grade         = row["Grade"] == DBNull.Value ? null : (double?)row["Grade"],
+            Grade = row["Grade"] == DBNull.Value ? null : (double?)row["Grade"],
         };
     }
 

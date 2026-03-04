@@ -47,7 +47,7 @@ public partial class Home(TestManagement management)
         temporaryTest.DueDate = DateOnly.FromDateTime(DateTime.Today);
         showModal = true;
     }
-    
+
     private void ModalSubmit()
     {
         if (temporaryTest is null)
@@ -83,6 +83,7 @@ public partial class Home(TestManagement management)
         CloseModal();
         Refresh();
     }
+
     private void CloseModal()
     {
         showModal = false;
