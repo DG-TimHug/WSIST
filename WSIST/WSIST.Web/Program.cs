@@ -5,6 +5,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+
+var connectionString =
+    builder.Configuration.GetConnectionString("DatabaseConnection")
+    ?? throw new ArgumentException("Missing Connection String.");
+builder.Services.Configure<DatabaseOption>(options => options.ConnectionString = connectionString);
+builder.Services.AddSingleton<Database>();
+
 builder.Services.AddSingleton<TestManagement>();
 
 var app = builder.Build();

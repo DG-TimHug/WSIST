@@ -2,16 +2,15 @@ using WSIST.Engine;
 
 namespace WSIST.Web.Components.Pages;
 
-public partial class Home
+public partial class Home(TestManagement management)
 {
-    private readonly TestManagement management = new();
     private List<Test> tests = [];
     private Test? temporaryTest;
     private Modes Mode { get; set; }
 
     protected override void OnInitialized()
     {
-        tests = management.Tests.ToList();
+        tests = management.LoadAllTests();
     }
 
     public enum Modes
@@ -48,7 +47,7 @@ public partial class Home
         temporaryTest.DueDate = DateOnly.FromDateTime(DateTime.Today);
         showModal = true;
     }
-    
+
     private void ModalSubmit()
     {
         if (temporaryTest is null)
@@ -84,6 +83,7 @@ public partial class Home
         CloseModal();
         Refresh();
     }
+
     private void CloseModal()
     {
         showModal = false;
@@ -93,11 +93,11 @@ public partial class Home
     private void Refresh()
     {
         management.Refresh();
-        tests = management.Tests.ToList();
+        tests = management.LoadAllTests();
         StateHasChanged();
     }
 
-    private void DeleteTest(Guid id)
+    private void DeleteTest(int id)
     {
         management.TestRemover(id);
         Refresh();

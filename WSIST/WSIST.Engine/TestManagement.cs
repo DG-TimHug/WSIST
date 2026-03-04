@@ -1,23 +1,14 @@
-using System.Text.Json;
+using System.Data;
 
 namespace WSIST.Engine;
 
 public class TestManagement
 {
-    private const string Filename =
-        @"C:\Development\Git Projects\WSIST\WSIST\WSIST.Engine\tests.json";
-    public List<Test> Tests = new();
+    private Database database;
 
-    public TestManagement()
+    public TestManagement(Database database)
     {
-        TestLoader();
-    }
-
-    private static Guid IdMaker()
-    {
-        var id = Guid.NewGuid();
-        Console.Write(id);
-        return id;
+        this.database = database;
     }
 
     public void NewTestMaker(
@@ -31,7 +22,6 @@ public class TestManagement
     {
         Test newTest = new()
         {
-            Id = IdMaker(),
             Title = title,
             Subject = subject,
             DueDate = dueDate,
@@ -40,12 +30,11 @@ public class TestManagement
             Grade = grade,
         };
         TestAssistants.GradeVerifier(dueDate, grade);
-        Tests.Add(newTest);
-        SaveTests(Tests);
+        SaveTests(subject, title, dueDate, volume, understanding, grade);
     }
 
     public void TestEditor(
-        Guid id,
+        int id,
         string title,
         Test.Subjects subject,
         DateOnly dueDate,
@@ -54,53 +43,106 @@ public class TestManagement
         double? grade
     )
     {
-        foreach (var test in Tests)
-        {
-            if (test.Id == id)
+        var verifiedGrade = TestAssistants.GradeVerifier(dueDate, grade);
+        database.Query(
+            "UPDATE Tests SET Title=@Title, Subject=@Subject, DueDate=@DueDate, "
+                + "Volume=@Volume, Understanding=@Understanding, Grade=@Grade WHERE Id=@Id;",
+            new Dictionary<string, object>
             {
-                test.Subject = subject;
-                test.Title = title;
-                test.DueDate = dueDate;
-                test.Volume = volume;
-                test.Understanding = understanding;
-                test.Grade = TestAssistants.GradeVerifier(dueDate, grade);
-                SaveTests(Tests);
+                { "Id", id },
+                { "Title", title },
+                { "Subject", (int)subject },
+                { "DueDate", dueDate.ToDateTime(TimeOnly.MinValue) },
+                { "Volume", (int)volume },
+                { "Understanding", (int)understanding },
+                { "Grade", (object?)verifiedGrade ?? DBNull.Value },
             }
-        }
-    }
-
-    public void TestRemover(Guid id)
-    {
-        var test = Tests.FirstOrDefault(test => test.Id == id);
-        if (test == null)
-            return;
-        Tests.Remove(test);
-        SaveTests(Tests);
-    }
-
-    private void SaveTests(List<Test> tests)
-    {
-        string json = JsonSerializer.Serialize(
-            tests,
-            new JsonSerializerOptions { WriteIndented = true }
         );
-        File.WriteAllText(Filename, json);
-        Console.WriteLine(json);
     }
 
-    private void TestLoader()
+    public void TestRemover(int id)
     {
-        if (File.Exists(Filename))
+        var dataTable = database.Query(
+            "DELETE FROM Tests WHERE Id = @Id;",
+            new Dictionary<string, object> { { "id", id } }
+        );
+    }
+
+    private void SaveTests(
+        Test.Subjects subject,
+        string title,
+        DateOnly dueDate,
+        Test.TestVolume volume,
+        Test.PersonalUnderstanding understanding,
+        double? grade
+    )
+    {
+        database.Query(
+            "INSERT INTO Tests (Title, Subject, DueDate, Volume, Understanding, Grade) "
+                + "VALUES (@Title, @Subject, @DueDate, @Volume, @Understanding, @Grade);",
+            new Dictionary<string, object>
+            {
+                { "Title", title },
+                { "Subject", (int)subject },
+                { "DueDate", dueDate.ToDateTime(TimeOnly.MinValue) },
+                { "Volume", (int)volume },
+                { "Understanding", (int)understanding },
+                { "Grade", (object?)grade ?? DBNull.Value },
+            }
+        );
+    }
+
+    public List<Test> LoadAllTests()
+    {
+        var dataTable = database.Query(
+            "SELECT Id, Title, Subject, DueDate, Volume, Understanding, Grade FROM Tests;"
+        );
+
+        var tests = new List<Test>();
+        foreach (DataRow row in dataTable.Rows)
         {
-            string jsonString = File.ReadAllText(Filename);
-            Tests = JsonSerializer.Deserialize<List<Test>>(jsonString) ?? [];
-            if (string.IsNullOrWhiteSpace(jsonString)) { }
+            tests.Add(
+                new Test
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Title = row["Title"].ToString()!,
+                    Subject = (Test.Subjects)Convert.ToInt32(row["Subject"]),
+                    DueDate = DateOnly.FromDateTime((DateTime)row["DueDate"]),
+                    Volume = (Test.TestVolume)Convert.ToInt32(row["Volume"]),
+                    Understanding = (Test.PersonalUnderstanding)
+                        Convert.ToInt32(row["Understanding"]),
+                    Grade = row["Grade"] == DBNull.Value ? null : (double?)row["Grade"],
+                }
+            );
         }
+        return tests;
     }
 
-    public void Refresh()
+    private Test LoadTest(int id)
     {
-        TestLoader();
-        Console.WriteLine("Refreshed");
+        var dataTable = database.Query(
+            "SELECT Id, Title, Subject, DueDate, Volume, Understanding, Grade FROM Tests WHERE Id = @Id;",
+            new Dictionary<string, object> { { "Id", id } }
+        );
+
+        if (dataTable.Rows.Count == 0)
+            throw new KeyNotFoundException($"Test with Id {id} not found.");
+
+        var row = dataTable.Rows[0];
+        return new Test
+        {
+            Id = Convert.ToInt32(row["Id"]),
+            Title = row["Title"].ToString()!,
+            Subject = (Test.Subjects)(int)row["Subject"],
+            DueDate = DateOnly.FromDateTime((DateTime)row["DueDate"]),
+            Volume = (Test.TestVolume)(int)row["Volume"],
+            Understanding = (Test.PersonalUnderstanding)(int)row["Understanding"],
+            Grade = row["Grade"] == DBNull.Value ? null : (double?)row["Grade"],
+        };
+    }
+
+    public List<Test> Refresh()
+    {
+        return LoadAllTests();
     }
 }
