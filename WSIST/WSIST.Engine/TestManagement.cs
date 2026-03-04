@@ -1,6 +1,4 @@
 using System.Data;
-using System.Text.Json;
-using Microsoft.Data.SqlClient;
 
 namespace WSIST.Engine;
 
@@ -8,19 +6,10 @@ public class TestManagement
 {
     private Database database;
     
-
     public TestManagement(Database database)
     {
-        database.Query("SELECT * FROM Tests WHERE Id = @Id", new Dictionary<string, object>
-        {
-            { "Id", 123 }
-        });
+        this.database = database;
     }
-    
-    //TODO: Global
-    // - Remove all mentions of the List test and load tests individually
-    // - Rewrite Save and Load methods
-    // - Figure out how Tests now need to be saved...
     
     public void NewTestMaker(
         string title,
@@ -104,12 +93,12 @@ public class TestManagement
         {
             tests.Add(new Test
             {
-                Id            = (int)row["Id"],
+                Id            = Convert.ToInt32(row["Id"]),
                 Title         = row["Title"].ToString()!,
-                Subject       = (Test.Subjects)(int)row["Subject"],
+                Subject       = (Test.Subjects)Convert.ToInt32(row["Subject"]),
                 DueDate       = DateOnly.FromDateTime((DateTime)row["DueDate"]),
-                Volume        = (Test.TestVolume)(int)row["Volume"],
-                Understanding = (Test.PersonalUnderstanding)(int)row["Understanding"],
+                Volume        = (Test.TestVolume)Convert.ToInt32(row["Volume"]),
+                Understanding = (Test.PersonalUnderstanding)Convert.ToInt32(row["Understanding"]),
                 Grade         = row["Grade"] == DBNull.Value ? null : (double?)row["Grade"],
             });
         }
@@ -129,7 +118,7 @@ public class TestManagement
         var row = dataTable.Rows[0];
         return new Test
         {
-            Id            = (int)row["Id"],
+            Id            = Convert.ToInt32(row["Id"]),
             Title         = row["Title"].ToString()!,
             Subject       = (Test.Subjects)(int)row["Subject"],
             DueDate       = DateOnly.FromDateTime((DateTime)row["DueDate"]),
