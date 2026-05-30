@@ -1,75 +1,107 @@
-﻿using NUnit.Framework;
+using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 using WSIST.Engine;
 
 namespace WSIST.UnitTests;
 
 public class UnitTests
 {
-    /*TODO: COMPLETE OVERHAUL
-        - Rewrite All Test to now work with Database.
-        - Clean out Tests that arent needed
-        - add checks future checks
-    */
+    private static WsistContext CreateContext()
+    {
+        var options = new DbContextOptionsBuilder<WsistContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
+        return new WsistContext(options);
+    }
+
+    private static User SeedUser(WsistContext context)
+    {
+        var user = new User
+        {
+            Email = "test@example.com",
+            DisplayName = "Test User",
+            GoogleId = "google-123",
+            CreatedAt = DateTime.UtcNow,
+        };
+        context.Users.Add(user);
+        context.SaveChanges();
+        return user;
+    }
+
     [Test]
     public void TestIfNewTestGetsMade()
     {
         //arrange
-        var manager = new TestManagement();
+        using var context = CreateContext();
+        var user = SeedUser(context);
+        var manager = new TestManagement(context);
+
         //act
         manager.NewTestMaker(
-            "Math Tets",
+            "Math Test",
             Test.Subjects.Math,
-            new DateOnly(2026, 02, 04),
+            new DateOnly(2026, 12, 01),
             Test.TestVolume.VeryHigh,
             Test.PersonalUnderstanding.VeryLow,
-            4.5,
-            1
+            null,
+            user.Id
         );
 
         //assert
-        Assert.That(manager.Tests.Any(t => t.Title == "Math Tets"));
+        Assert.That(manager.LoadAllTests(user.Id).Any(t => t.Title == "Math Test"));
     }
 
     [Test]
     public void CheckIfTestWasDeleted()
     {
         //arrange
-        var manager = new TestManagement();
-        Guid id = new Guid("3a5cd0af-7c40-425c-8235-c47b5b9596ec");
-        //act
-        manager.TestRemover(id);
-        Assert.That(
-            manager.Tests.Any(t => t.Id == id),
-            Is.False,
-            "The Test with the given ID should no longer exist"
+        using var context = CreateContext();
+        var user = SeedUser(context);
+        var manager = new TestManagement(context);
+
+        manager.NewTestMaker(
+            "Test To Delete",
+            Test.Subjects.German,
+            new DateOnly(2026, 12, 01),
+            Test.TestVolume.Low,
+            Test.PersonalUnderstanding.High,
+            null,
+            user.Id
         );
+
+        //act
+        var test = manager.LoadAllTests(user.Id).First();
+        manager.TestRemover(test.Id);
+
+        //assert
+        Assert.That(manager.LoadAllTests(user.Id).Any(t => t.Id == test.Id), Is.False);
     }
 
     [Test]
     public static void CheckIfGradeIsNotNullIfInThePast()
     {
         //arrange
-        DateOnly DueDate = new DateOnly(2025, 06, 07);
+        DateOnly dueDate = new DateOnly(2025, 06, 07);
         var grade = 4.6;
+
         //act
-        var result = TestAssistants.GradeVerifier(DueDate, grade);
-        //Assert
-        Assert.That(
-            result,
-            Is.Not.Null,
-            "Its Possible for a test to have a grade if the test was in the Past"
-        );
+        var result = TestAssistants.GradeVerifier(dueDate, grade);
+
+        //assert
+        Assert.That(result, Is.Not.Null);
     }
 
     [Test]
     public static void CheckIfGradeIsNullIfInTheFuture()
     {
         //arrange
-        DateOnly DueDate = new DateOnly(2030, 06, 07);
+        DateOnly dueDate = new DateOnly(2030, 06, 07);
         var grade = 4.6;
+
         //act
-        var result = TestAssistants.GradeVerifier(DueDate, grade);
-        //Assert
-        Assert.That(result, Is.Null, "Date is in the future so Test Cant Have Grade Yet");
+        var result = TestAssistants.GradeVerifier(dueDate, grade);
+
+        //assert
+        Assert.That(result, Is.Null);
     }
 }

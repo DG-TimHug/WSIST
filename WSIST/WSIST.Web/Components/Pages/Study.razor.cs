@@ -6,33 +6,17 @@ using WSIST.Engine;
 namespace WSIST.Web.Components.Pages;
 
 public partial class Study(TestManagement management, AuthenticationStateProvider authStateProvider, NavigationManager navigation, PriorityCalculator calculator)
+    : AuthenticatedComponentBase(management, authStateProvider, navigation)
 {
     private List<Test> allTests = [];
     private List<Test> recommendations = [];
     private double hoursAvailable = 1;
     private bool calculated = false;
-    private int currentUserId;
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnAuthenticatedAsync()
     {
-        var authState = await authStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user?.Identity?.IsAuthenticated != true)
-        {
-            navigation.NavigateTo("/login-page", forceLoad: true);
-            return;
-        }
-
-        var email = user.FindFirst(ClaimTypes.Email)?.Value;
-        var name = user.FindFirst(ClaimTypes.Name)?.Value ?? "Unknown";
-        var googleId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
-
-        if (email is null) return;
-
-        var dbUser = management.GetOrCreateUser(email, name, googleId);
-        currentUserId = dbUser.Id;
-        allTests = management.LoadAllTests(currentUserId);
+        allTests = management.LoadAllTests(CurrentUserId);
+        return Task.CompletedTask;
     }
 
     private void Calculate()

@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using WSIST.Engine;
@@ -6,32 +5,38 @@ using WSIST.Engine;
 namespace WSIST.Web.Components.Pages;
 
 public partial class Home(TestManagement management, AuthenticationStateProvider authStateProvider, NavigationManager navigation)
+    : AuthenticatedComponentBase(management, authStateProvider, navigation)
 {
     private List<Test> tests = [];
     private Test? temporaryTest;
     private Modes Mode { get; set; }
-    private int currentUserId;
+    private bool showPastCompleted;
 
-    protected override async Task OnInitializedAsync()
+    private static DateOnly Today => DateOnly.FromDateTime(DateTime.Today);
+
+    // Upcoming: due today or later.
+    private IEnumerable<Test> UpcomingTests => tests.Where(t => t.DueDate >= Today);
+
+    // Past but missing a grade — needs the user's attention to be completed.
+    private IEnumerable<Test> PastUngradedTests => tests.Where(t => t.DueDate < Today && t.Grade is null);
+
+    // Past and graded — hidden by default, shown when the user wants to review performance.
+    private IEnumerable<Test> PastCompletedTests => tests.Where(t => t.DueDate < Today && t.Grade is not null);
+
+    protected override Task OnAuthenticatedAsync()
     {
-        var authState = await authStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+        LoadTests();
+        return Task.CompletedTask;
+    }
 
-        if (user?.Identity?.IsAuthenticated != true)
-        {
-            navigation.NavigateTo("/login-page", forceLoad: true);
-            return;
-        }
+    private void LoadTests()
+    {
+        tests = management.LoadAllTests(CurrentUserId);
+    }
 
-        var email = user.FindFirst(ClaimTypes.Email)?.Value;
-        var name = user.FindFirst(ClaimTypes.Name)?.Value ?? "Unknown";
-        var googleId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
-
-        if (email is null) return;
-
-        var dbUser = management.GetOrCreateUser(email, name, googleId);
-        currentUserId = dbUser.Id;
-        tests = management.LoadAllTests(currentUserId);
+    private void TogglePastCompleted()
+    {
+        showPastCompleted = !showPastCompleted;
     }
 
     public enum Modes
@@ -84,7 +89,7 @@ public partial class Home(TestManagement management, AuthenticationStateProvider
                     temporaryTest.Volume,
                     temporaryTest.Understanding,
                     temporaryTest.Grade,
-                    currentUserId
+                    CurrentUserId
                 );
                 break;
             }
@@ -114,7 +119,7 @@ public partial class Home(TestManagement management, AuthenticationStateProvider
 
     private void Refresh()
     {
-        tests = management.LoadAllTests(currentUserId);
+        LoadTests();
         StateHasChanged();
     }
 
